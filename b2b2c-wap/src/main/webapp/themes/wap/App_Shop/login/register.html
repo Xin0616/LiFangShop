@@ -1,0 +1,171 @@
+<#assign  title="会员注册" />
+<#include '../../common/header.html'/>
+<#assign apartListTag = newTag("apartmentListTag")>
+<#assign apartmentList = apartListTag('{"type":0}')>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>注册</title>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+    <link href="${ctx}${themes_path}/App_Shop/css/mui.picker.css" rel="stylesheet" />
+    <link href="${ctx}${themes_path}/App_Shop/css/mui.poppicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/register.css"/>
+    <style>
+        #reg-content .change-content{
+            text-indent: 0;
+            width: 70%;
+            display: inline-block;
+        }
+        #reg-content .change-content>a{
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            width: 20%;
+            background: #E73602;
+            color: #fff;
+            letter-spacing: 1px;
+            border: 0 solid transparent;
+            border-radius: 5px;
+        }
+        .choose{
+            position: fixed;
+		    z-index: 9;
+		    width: 100%;
+		    background-color: #666666;
+		    bottom: 50%;
+        }
+        .choose div{
+        	height: 150px;
+    		font-size: 24px;
+		    border: 1px solid white;
+		    color: white;
+		    line-height: 150px;
+		}
+    </style>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">注册</h1>
+    </header>
+    <div id="reg-content">
+    	<div id="maskDiv" style="display: none;">
+	    	<div class="mui-row choose">
+	    		<div class="mui-col-sm-6 mui-col-xs-6 mui-text-center local" style="border-right: 1px solid;">
+		        	相册
+		        </div>
+	    		<div class="mui-col-sm-6 mui-col-xs-6 mui-text-center camera">
+		        	拍照
+		        </div>
+	    	</div>
+    	</div>
+        <div id="register-form" class="mui-input-group">
+            <div class="content">
+                <div class="mui-input-row">
+                    <label for="telephone"><span style="color:#E73602">*</span>  手机号</label>
+                    <input id='telephone' type="text" maxlength="11"  class="mui-input-clear mui-input" placeholder="输入手机号码"  data-options='{required:true,dataType:"phone"}' name="telephone">
+                </div>
+                <div class="mui-input-row" style="position: relative">
+                    <label for="code"><span style="color:#E73602">*</span>  验证码</label>
+                    <input id='code' type="text" class="mui-input" placeholder="输入发送的验证码" data-options='{required:true,dataType:"code"}' name="code">
+                    <div class="collect-code" id="get_code">
+                        获取验证码
+                    </div>
+                </div>
+                <div class="mui-input-row">
+                    <label for="password"><span style="color:#E73602">*</span>  密码</label>
+                    <input id='password' data-options='{required:true,dataType:"password"}' type="password" class="mui-input-clear mui-input" placeholder="设置您的登录密码" name="password">
+                </div>
+            </div>
+	            <div class="content">
+	                <div class="mui-input-row">
+                        <label><span style="color:#E73602">*</span>  所属小区</label>
+                        <p style="text-indent: 0;" class="change-content">
+                            <input onkeyup="Change(this);" type="text" id="customerName" name="customerName" data-options='{required:true}' class="mui-input-row input-setting" placeholder="请输入小区">
+                            <input id="apartment_id" type="hidden" value=""/>
+                            <a href="#query" class="mui-btn mui-btn-block mui-text-center font-size-middle button1 mypopvers">查找</a>
+                        </p>
+                    </div>
+                <div id="query" class="mui-popover" style="width: 80%;height:300px;">
+                    <div class="mui-popover-arrow"></div>
+                    <div class="mui-scroll-wrapper">
+                        <div class="mui-scroll">
+                            <ul id="list_obj" class="mui-table-view mui-table-view-radio">
+								<#list apartmentList as apart>
+								<li id="change-li" class='mui-table-view-cell' onclick='selected1(this);'>
+                                    <a href='#'>${apart.name}</a>
+                                    <input type="hidden" value="${apart.id}"/>
+                                </li>
+								</#list>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="mui-input-row">-->
+                    <!--<label for="address_num">楼号</label>-->
+                    <!--<input id='address_num' type="text" class="mui-input-clear mui-input" placeholder="填写您的门牌号">-->
+                <!--</div>-->
+            </div>
+            <div class="content">
+                <div class="mui-input-row">
+                    <label for="nickname"><span style="color:#E73602">*</span>  昵称</label>
+                    <input id='nickname' type="text" class="mui-input-clear mui-input" placeholder="设置您的昵称" name="nickname" data-options='{required:true}'>
+                </div>
+                <!--<div class="mui-input-row">-->
+                    <!--<label>性别</label>-->
+                    <!--&lt;!&ndash;<input id='gender' type="checkbox" class="mui-input-clear mui-input">&ndash;&gt;-->
+                    <!--<p class="radio-content">-->
+                        <!--<span>男性：</span>-->
+                        <!--<input type="radio" checked="checked" name="Sex" value="male" class=" mui-radio"/>-->
+                    <!--</p>-->
+                    <!--<p class="radio-content">-->
+                        <!--<span>女性：</span>-->
+                        <!--<input type="radio" name="Sex" value="female" class=" mui-radio"/>-->
+                    <!--</p>-->
+
+                <!--</div>-->
+            </div>
+            <div class="content">
+                <!--<div class="mui-input-row">-->
+                    <!--<label for="profession">职业</label>-->
+                    <!--<input id='profession' type="text" class="mui-input-clear mui-input">-->
+                <!--</div>-->
+                <div class="mui-input-row" style="height: 70px">
+                    <label style="line-height: 50px">头像</label>
+                    <!--<input type="file" style="width: 100%;height: 70px;opacity: 0"/>-->
+                    <img id="pic" src="${ctx}${themes_path}/App_Shop/myimages/login/photo.png" style="float: right;margin: 5px 10px;width: 60px;height:60px"/>
+                    <input data-role="none" id="upload" name="file" accept="image/*" type="file" style="display: none"/>
+                </div>
+            </div>
+            <div class="content">
+                <div class="mui-input-row" style="text-align: center;line-height: 40px;font-size:12px">
+                    温馨提示: 注册本站即代表您已同意<a href="javascript:;" class="user-agreement-click" style="color: #0a89c7;">《用户服务协议》</a>
+                </div>
+            </div>
+            <div class="content" id="error_info" style="display:none;background-color: #E73602;">
+            	<div class="mui-input-row" style="text-align:center;line-height:40px;color:#fff">
+            		
+            	</div>
+            </div>
+        </div>
+        <div class="mui-content-padded">
+            <button id='reg' class="mui-btn mui-btn-block mui-btn-primary">提交</button>
+        </div>
+    </div>
+    <div id="mypopup">
+				
+				<div class="prompt">
+					<p id="wxts">温馨提示</p>
+					<p id="hintinfo"></p>
+					<a id="closepopup">确定</a>
+				</div>
+		</div>
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/layer/layer.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.picker.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.picker.all.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.poppicker.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/page/register.js"></script>

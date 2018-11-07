@@ -1,0 +1,103 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div id="loading"></div>
+<div class="main">
+
+	<div class='buttonArea' style="height: auto">
+	
+		<span style="float:left;"> 
+			<span id="simpleSearch">
+			日期：
+			<input class="easyui-datebox" style="width: 190px;height: 28px;" id="start_time" />
+                        <span>&nbsp;~&nbsp;</span>
+                        <input class="easyui-datebox" style="width: 190px;height: 28px;" id="end_time" />
+                        按店铺搜索:
+			</td>
+					<td width="70" >
+					<select id="store">
+						<!-- <option value="0">--请选择--</option> -->
+						<option value='0' selected >--全平台--</option>
+						<#list storeList as store>
+							<option value="${store.store_id}">${store.store_name}</option> 
+						</#list>
+					</select>
+				</td>
+					商品分类:
+				</td>
+				<td width="170px">
+					<select id="commodity" class="easyui-combotree combo" name="commodity" 
+						data-options="url:'${ctx}/shop/admin/cat/add-list-json.do',required:false,height:28"
+						style="width: 170px;">
+					</select>
+				</td>
+				<a class="button" onclick="searchApartments()">搜索</a>
+			</span>
+		</span>
+	</div>
+			
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<table  id="dgsv" class="easyui-datagrid" 
+			data-options="url:'${ctx}/b2b2c/admin/store-sales-valume/list-json.do',remoteSort:false,pageList: [10,15,20],pageSize:${pageSize},fitColumns:'true'" 
+			pagination="true" width="width">
+			    <thead>
+				    <tr>
+				    		<th  data-options="field:'store_name',width:100">商家名称</th>
+					   		<th  data-options="field:'name',width:100">商品名称</th>
+					    	<th  data-options="field:'price',width:100"  >商品单价</th>
+					    	<th  data-options="field:'num',width:100" >实际购买数量</th>
+					    	<th  data-options="field:'unit',width:100" >实际购买单位</th>
+					    	<th  data-options="field:'create_time',width:100" formatter="formatTime" >时间</th>
+					    	
+					    	
+				    </tr>	
+			    </thead>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+
+function formatTime(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+}
+function formatAction(value,row,index){
+	var val="<a href='#' onclick=\"newTab('账单列表','${ctx}/b2b2c/admin/store-bill/detail-list.do?bill_id="+row.bill_id+"')\">查看</a>"
+	return val;
+} 
+
+function searchApartments() {
+	var commodity =$("input[name='commodity']").val();
+	var business = $("#business").val();
+	var business = $('#store option:selected') .val();
+	
+	//选中的值
+	
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue'); 
+	if(start_time != '' && end_time != ''){
+		if(end_time < start_time){
+			$.Loading.error("结束时间不能小于开始时间");
+			return ;
+		}
+	}
+	
+	
+	$("#dgsv").datagrid('load', {
+		commodity : commodity,
+		business : business,
+		start_time : start_time,
+		end_time : end_time,
+		type : 1,
+		page : 1
+	});
+}
+</script>

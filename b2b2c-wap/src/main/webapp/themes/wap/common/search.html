@@ -1,0 +1,46 @@
+<div class="control-search">
+    <div class="nav-control-search">
+        <div class="inner">
+            <i class="close-control-search" id="search-close"></i>
+            <div class="input-control-search">
+                <form  class="search-form" id="search-form" action="${ctx}/goods-list.html" method="post">
+                    <div class="input-box">
+                        <span class="search-type show-search-type-box">
+                            商品
+                        </span>
+                        <div class="search-type-box">
+                            <ul>
+                                <li class="item" data-title="商品"><i class="icon-search-type type-goods"></i>商品</li>
+                                <li class="item" data-title="店铺"><i class="icon-search-type type-store"></i>店铺</li>
+                            </ul>
+                        </div>
+                        <i class="arrow-down show-search-type-box"></i>
+                        <input type="hidden" id="search-type" name="search" value="goods">
+                        <input type="hidden" name="searchType" value="default">
+                        <input type="text" class="search-input" id="search-input" name="keyword" placeholder="搜索商品/店铺">
+                        <i class="search-icon"></i>
+                        <input type="button" class="search-submit" onclick="seachAndAdd();">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <#-- 获取CMS数据搜索标签�?-->
+    <#assign searchRecordListTag=newTag("searchRecordListTag") />
+    <#-- 调用CMS数据搜索标签，并传递所在模型ID参数(es_hot_keyword�?)�?”表示出现三个关键词�?-->
+    <#assign hotKeyWord = searchRecordListTag() />
+    <#if (hotKeyWord?size > 0) >
+        <div class="hot-keyword-control-search">
+            <div class="title-hot-keyword">
+                <span>历史记录</span>
+            </div>
+            <div class="content-hot-keyword">
+                <ul class="key-words">
+                    <#list hotKeyWord as hotkeyword>
+                        <li class="item">${hotkeyword.content}</li>
+                    </#list>
+                </ul>
+            </div>
+        </div>
+    </#if>
+</div>

@@ -1,0 +1,31 @@
+<div class="easyui-panel" style="border-style: none;">
+	<form method="post" class="validate" id="editForm">
+		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+			<tr>
+				<th><label class="text">名称：</label></th>
+				<td>
+					<input type="text" class="easyui-validatebox input_text" 
+						id="name" name="name" <#if apart?exists> value="${apart.name!''}"</#if> />
+				</td>
+			</tr>
+		<#if type==1>
+			<tr>
+				<th><label class="text">小区：</label></th>
+				<td>
+				<#list dischecks as disc>
+					<input type="checkbox" name="dis" disabled="true">${disc.name}
+				</#list>
+					<br>
+				<#list canchecks as canc>
+					<input type="checkbox" name="ids" value="${canc.id}">${canc.name}
+				</#list>
+					<br>
+				<#list alchecks as alc>
+					<input type="checkbox" name="ids" value="${alc.id}" checked>${alc.name}
+				</#list>
+				</td>
+			</tr>
+		</#if>
+		</table>
+	</form>
+</div>

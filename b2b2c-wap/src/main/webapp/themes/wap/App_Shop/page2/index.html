@@ -1,0 +1,514 @@
+<#assign  title="运货员首页" />
+<#include '../../common/header.html'/>
+<#assign apartListTag = newTag("apartmentListTag") />
+<#assign apartmentList = apartListTag('{"type":0}') />
+<#assign deliveryOrderListTag = newTag("deliveryOrderListTag") />
+<#assign deliveryOrderList = deliveryOrderListTag('{"status":${status!9},"apartment_id":${apartment_id!6}}')/>
+<#assign orderLists = deliveryOrderList.ordersList />
+<#assign s = deliveryOrderList.s />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign member = memberLoginCheckTag() />
+<style>
+	#but-all{
+        position: absolute;
+        top: 50%;
+        right: -5px;
+        width: 70px;
+        height: 30px;
+        padding: 5px;
+        margin-top: -20px;
+        border: 1px solid #FF5000;
+        color: #FF5000;
+        border-radius: 5px;
+    }
+    #back{
+        position: absolute;
+        top: 60%;
+        right: -5px;
+        width: 70px;
+        height: 30px;
+        padding: 5px;
+        margin-top: -20px;
+        border: 1px solid #FF5000;
+        color: #FF5000;
+        border-radius: 5px;
+    }
+    #purse{
+        position: absolute;
+        top: 95%;
+        right: -5px;
+        width: 70px;
+        height: 30px;
+        padding: 5px;
+        margin-top: -20px;
+        border: 1px solid #FF5000;
+        color: #FF5000;
+        border-radius: 5px;
+    }
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>运货员</title>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css">
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/iconfont.css"/>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css"/>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/songhuo.css"/>
+    <script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+<body>
+    <nav class="mui-bar mui-bar-tab">
+        <a class="mui-tab-item mui-active" id="hm" href="#home">
+            <span class="mui-icon iconfont icon-dingdan"></span>
+            <span class="mui-tab-label">订单</span>
+        </a>
+        <a class="mui-tab-item" id="cz" href="#chongzhi">
+            <span class="mui-icon iconfont icon-chongzhi"></span>
+            <span class="mui-tab-label">充值</span>
+        </a>
+        <a id="quit" class="mui-tab-item">
+            <span class="mui-icon iconfont icon-tuichu" ></span>
+            <span class="mui-tab-label">退出</span>
+        </a>
+    </nav>
+    <div class="mui-content">
+        <div id="home" class="mui-control-content mui-active">
+            <header class="mui-bar mui-bar-nav">
+                <h1 class="mui-title">送货员</h1>
+            </header>
+            <div class="mui-content">
+                <div id="slider" class="mui-slider">
+                    <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="padding-top: 10px">
+                        <a class="mui-control-item font-size-middle o" data="9">
+                            可领取订单
+                            <input type="hidden" value="9"/>
+                        </a>
+                        <a class="mui-control-item font-size-middle o" data="3">
+                            <input type="hidden" value="3"/>
+                            已领取订单
+                        </a>
+                        <a class="mui-control-item font-size-middle o" data="4">
+                            <input type="hidden" value="4"/>
+                            已完成订单
+                        </a>
+                    </div>
+                    <div class="mui-slider-group">
+                        <div class="mui-slider-item mui-control-content mui-active">
+                            <div class="mui-loading">
+                                <div class="mui-control-content mui-active">
+                                    <div id="segmentedControl" class="mui-scroll-wrapper mui-slider-indicator c mui-segmented-control">
+                                        <div class="mui-scroll">
+                                            <#list apartmentList as apart>
+                                                <a class="mui-control-item z" data="${apart.id}">
+                                                    ${apart.name}
+                                                    <input type="hidden" value="${apart.id}"/>
+                                                </a>
+                                            </#list>
+                                        </div>
+                                    </div>
+                                    <div class="mui-input-row mui-checkbox" style="padding: 10px 0">
+                                        <label for="selectall">全选</label>
+                                        <input type="checkbox" id="selectall" style="left: 50px;right: 0;top:15px"/>
+                                        <button id="but-all"  style="right:10%">
+                                            <#if s == 9>
+                                                批量领取
+                                            </#if>
+                                            <#if s == 3>
+                                                批量送达
+                                            </#if>
+                                            <#if s == 4>
+                                                已完成
+                                            </#if>
+                                        </button>
+                                    </div>
+                                    <ul class="mui-table-view">
+                                        <#if s == 9>
+                                            <#list orderLists as orderList>
+                                            <li class="mui-table-view-cell">
+                                                <div class="content1 mui-input-row mui-checkbox">
+                                                    订单编号：<span class="order_id">${orderList.sn}</span><br/>
+                                                    订单生成时间：<span><@dateformat time="${orderList.create_time}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+                                                    <input class="" type="checkbox" name="subcheck" value="${orderList.order_id}"/>
+                                                </div>
+                                                <div class="content2">
+                                                    收货人：<span>${orderList.store_name}</span>
+                                                    <a href="tel:${orderList.store_mobile}">
+                                                        <i style="display: inline-block;width: 18px;height: 20px">
+                                                            <img src="${ctx}${themes_path}/App_Shop/myimages/tel.png" width="100%" style="vertical-align: middle"/>
+                                                        </i>
+                                                    </a> <br/>
+                                                    收货人地址：<span>${orderList.store_addr}</span><a href=""></a><br/>
+                                                    发货人：<span>${orderList.ship_name}</span>
+                                                    <a href="tel:${orderList.ship_mobile}">
+                                                        <i style="display: inline-block;width: 18px;height: 20px">
+                                                            <img src="${ctx}${themes_path}/App_Shop/myimages/tel.png" width="100%" style="vertical-align: middle"/>
+                                                        </i>
+                                                    </a> <br/>
+                                                    发货人地址：<span>${orderList.ship_addr}</span><br/>
+                                                    <button class="sta-btn">
+                                                        领取货物
+                                                        <input type="hidden" value="${orderList.order_id}"/>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            </#list>
+                                        </#if>
+                                        <#if s == 3>
+                                            <#list orderLists as orderList>
+                                                <li class="mui-table-view-cell">
+                                                    <div class="content1 mui-input-row mui-checkbox">
+                                                        订单编号：<span>${orderList.sn}</span><br/>
+                                                        订单生成时间：<span><@dateformat time="${orderList.create_time}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+                                                        <input class="" type="checkbox" name="subcheck" value="${orderList.order_id}"/>
+                                                    </div>
+                                                    <div class="content2">
+                                                        收货人：<span>${orderList.store_name}</span>
+                                                        <a href="tel:${orderList.store_mobile}">
+                                                            <i style="display: inline-block;width: 18px;height: 20px">
+                                                                <img src="${ctx}${themes_path}/App_Shop/myimages/tel.png" width="100%" style="vertical-align: middle"/>
+                                                            </i>
+                                                        </a> <br/>
+                                                        收货人地址：<span>${orderList.store_addr}</span><a href=""></a><br/>
+                                                        发货人：<span>${orderList.ship_name}</span>
+                                                        <a href="tel:${orderList.ship_mobile}">
+                                                            <i style="display: inline-block;width: 18px;height: 20px">
+                                                                <img src="${ctx}${themes_path}/App_Shop/myimages/tel.png" width="100%" style="vertical-align: middle"/>
+                                                            </i>
+                                                        </a> <br/>
+                                                        发货人地址：<span>${orderList.ship_addr}</span><br/>
+                                                        <button class="sta-btn" style="top:25%">
+                                                            确认送达
+                                                            <input type="hidden" value="${orderList.order_id}"/>
+                                                        </button>
+                                                        <button id="back">
+                                                            确认退货
+                                                            <input type="hidden" value="${orderList.order_id}"/>
+                                                        </button>
+                                                        <button id="purse">
+                                                            充值
+                                                            <input id="order_id" type="hidden" value="${orderList.order_id}"/>
+                                                            <input id="member_nickname" type="hidden" value="${orderList.member_nickname}"/>
+                                                            <input id="member_moblie" type="hidden" value="${orderList.member_mobile}"/>
+                                                            <input id="need_pay_money" type="hidden" value="${orderList.need_pay_money}"/>
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            </#list>
+                                        </#if>
+                                        <#if  s == 4>
+                                            <#list orderLists as orderList>
+                                                <li class="mui-table-view-cell">
+                                                    <div class="content1 mui-input-row mui-checkbox">
+                                                        订单编号：<span>${orderList.sn}</span><br/>
+                                                        订单生成时间：<span><@dateformat time="${orderList.create_time}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+                                                        <input class="" type="checkbox" name="subcheck" value="${orderList.order_id}"/>
+                                                    </div>
+                                                    <div class="content2">
+                                                        收货人：<span>${orderList.store_name}</span>
+                                                        <a href="tel:${orderList.store_mobile}">
+                                                            <i style="display: inline-block;width: 18px;height: 20px">
+                                                                <img src="${ctx}${themes_path}/App_Shop/myimages/tel.png" width="100%" style="vertical-align: middle"/>
+                                                            </i>
+                                                        </a> <br/>
+                                                        收货人地址：<span>${orderList.store_addr}</span><a href=""></a><br/>
+                                                        发货人：<span>${orderList.ship_name}</span>
+                                                        <a href="tel:${orderList.ship_mobile}">
+                                                            <i style="display: inline-block;width: 18px;height: 20px">
+                                                                <img src="${ctx}${themes_path}/App_Shop/myimages/tel.png" width="100%" style="vertical-align: middle"/>
+                                                            </i>
+                                                        </a><br/>
+                                                        发货人地址：<span>${orderList.ship_addr}</span><br/>
+                                                        <span>已完成</span>
+                                                            <input type="hidden" value="${orderList.order_id}"/>
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            </#list>
+                                        </#if>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="chongzhi" class="mui-control-content">
+            <header class="mui-bar mui-bar-nav">
+                <h1 class="mui-title">充值</h1>
+            </header>
+            <div class="mui-content">
+                <form id="purse_info" class="mui-input-group">
+                    <div class="mui-input-row">
+                        <label>手机号</label>
+                        <input id="moblie" type="text"/>
+                    </div>
+                    <div class="mui-input-row">
+                        <label>用户名</label>
+                        <input id="nickname" type="text"/>
+                    </div>
+                    <div class="mui-input-row">
+                        <label>金额</label> 
+                        <input id="num" type="text"/>
+                    </div>
+                </form>
+                <button id="purse-btn" type="button" class="mui-btn mui-btn-primary btn-sub">确认</button>
+            </div>
+        </div>
+    </div>
+    <script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+    <script src="${ctx}${themes_path}/App_Shop/js/layer/layer.js"></script>
+    <script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+	<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+    <script>
+        $(function(){
+            /*运货员订单筛选*/
+            var status = GetQueryString("status");
+            var apartment_id = GetQueryString("apartment_id");
+            if(status == undefined){
+            	status = 9;
+            }
+            if(apartment_id == undefined){
+                apartment_id = 6;
+            }
+            $(".o[data='" + status + "']").addClass("mui-active");
+            $(".z[data='" + apartment_id + "']").addClass("mui-active");
+            $(".o").on("tap",function(){
+                status = $(this).find("input[type='hidden']").val();
+                location.href = "index.html?status=" + status + "";
+            });
+            $(".z").on("tap",function(){
+                apartment_id = $(this).find("input[type='hidden']").val();
+                location.href = "index.html?status=" + status + "&apartment_id="+ apartment_id +"";
+            });
+            
+            /*单选提交按钮*/
+            $(".sta-btn").on("tap",function(){
+                /*获取状态值*/
+                var status_x;
+                var alert = "";
+                if(status == 9){
+                    status_x = 3;
+                    alert = "确认领取吗？"
+                }else if(status == 3){
+                    status_x = 4;
+                    alert = "确认送达吗？";
+                }
+                var that = $(this);
+                var btnArray = ['否', '是'];
+                mui.confirm(alert, '温馨提示', btnArray, function(e) {
+                    if (e.index == 1) {
+                        $myAjax({
+                            url:ctx + '/api/shop/order/update-status-courier.do',
+                            data:{
+                                ids: that.find("input[type='hidden']").val(),
+                                status: status_x
+                            },
+                            dataType:'json',
+                            type:'post',
+                            timeout:10000,//超时时间设置为10秒；
+                            success:function(data){
+                                //服务器返回响应，根据响应结果，分析是否登录成功；
+                                if (data.result == 1) {
+                                    location.reload();
+                                }else {
+                                    mui.alert(data.message);
+                                }
+                            },
+                            error:function(xhr,type,errorThrown){
+                                //异常处理；
+                                module.message.error('出现错误，请重试！');
+                            }
+                        });
+                    } else {
+                        console.log("取消操作");
+                    }
+                })
+            });
+            /*控制全选、取消全选*/
+            var chkall = document.getElementById("selectall");
+            chkall.addEventListener("change", function () {
+                if(this.checked){
+                    mui("input[name='subcheck']").each(function () {
+                        this.checked = true;
+                    });
+                }else{
+                    mui("input[name='subcheck']").each(function () {
+                        this.checked = false;
+                    });
+                }
+            },false);
+            var cbknum = mui("input[name='subcheck']").length;
+            var chknum = 0;
+            mui(".content1").on("change","input[name='subcheck']",function () {
+                if(this.checked){
+                    chknum++;
+                }else{
+                    chknum--;
+                }
+                if(cbknum == chknum){
+                    chkall.checked = true;
+                }else{
+                    chkall.checked = false;
+                }
+            });
+
+            /*是否退出*/
+            document.getElementById("quit").addEventListener('tap', function(e) {
+                e.preventDefault();
+                var btnArray = ['否', '是'];
+                mui.confirm('确定提出吗？', '温馨提示', btnArray, function(e) {
+                    if (e.index == 1) {
+                        console.log('退出成功！') ;
+                        location.href = ctx + "/App_Shop/login/login.html";
+                    } else {
+                        console.log('取消退出，继续使用！');
+                    }
+                })
+            });
+            /*批量提交按钮*/
+            $("#but-all").on("tap", function () {
+                /*获取状态值*/
+                var ids = "";
+                $("input[name='subcheck']:checked").each(function(){
+                    if(ids == ""){
+                        ids += $(this).val();
+                    }else{
+                        ids += "," + $(this).val();
+                    }
+                });
+                if(ids == ""){
+                    mui.alert("您未勾选任何订单！！！");
+                    return;
+                }else{
+                    var status_x;
+                    var alert = "";
+                    if(status == 9){
+                        status_x = 3;
+                        alert = "确认批量领取吗？"
+                    }else if(status == 3){
+                        status_x = 4;
+                        alert = "确认批量送达吗？";
+                    }
+                    var btnArray = ['否', '是'];
+                    mui.confirm(alert, '温馨提示', btnArray, function(e) {
+                        if (e.index == 1) {
+                            $myAjax({
+                                url:ctx + '/api/shop/order/update-status-courier.do',
+                                data:{
+                                    ids: ids,
+                                    status: status_x
+                                },
+                                dataType:'json',
+                                type:'post',
+                                timeout:10000,//超时时间设置为10秒；
+                                success:function(data){
+                                    //服务器返回响应，根据响应结果，分析是否登录成功；
+                                    if (data.result == 1) {
+                                        location.reload();
+                                    }else {
+                                        mui.alert(data.message);
+                                    }
+                                },
+                                error:function(xhr,type,errorThrown){
+                                    //异常处理；
+                                    module.message.error('出现错误，请重试！');
+                                }
+                            });
+                        } else {
+                            console.log("取消操作");
+                        }
+                    })
+                }
+            });
+            /*后退按钮操作*/
+            $("#back").on("tap",function(){
+                /*获取状态值*/
+                var status_x = 9;
+                var alert = "确认退领吗？";
+                var that = $(this);
+                var btnArray = ['否', '是'];
+                mui.confirm(alert, '温馨提示', btnArray, function(e) {
+                    if (e.index == 1) {
+                        $myAjax({
+                            url:ctx + '/api/shop/order/update-status-courier.do',
+                            data:{
+                                ids: that.find("input[type='hidden']").val(),
+                                status: status_x
+                            },
+                            dataType:'json',
+                            type:'post',
+                            timeout:10000,//超时时间设置为10秒；
+                            success:function(data){
+                                //服务器返回响应，根据响应结果，分析是否登录成功；
+                                if (data.result == 1) {
+                                    location.reload();
+                                }else {
+                                    mui.alert(data.message);
+                                }
+                            },
+                            error:function(xhr,type,errorThrown){
+                                //异常处理；
+                                module.message.error('出现错误，请重试！');
+                            }
+                        });
+                    } else {
+                        console.log("取消操作");
+                    }
+                })
+            });
+            /*充值接口*/
+            $("#purse").on("tap", function () {
+                var order_id = $("#order_id").val();
+                var member_nickname = $("#member_nickname").val();
+                var member_moblie = $("#member_moblie").val();
+                var need_pay_money = $("#need_pay_money").val();
+                $("#hm").removeClass("mui-active");
+                $("#home").removeClass("mui-active");
+                $("#cz").addClass("mui-active");
+                $("#chongzhi").addClass("mui-active");
+                $("#moblie").val(member_moblie); 
+                $("#nickname").val(member_nickname);
+                $("#num").val(need_pay_money);
+                $("input[type='text']").attr("readonly","readonly");
+            });
+            $("#purse-btn").on("tap",function(){
+                var btnArray = ['否', '是'];
+                var alert = "确认充值吗？";
+                mui.confirm(alert, '温馨提示', btnArray, function(e) {
+                    if (e.index == 1) {
+                        var order_id = $("#order_id").val();
+                        $myAjax({
+                            url:ctx + '/api/shop/member/recharge-frozen.do',
+                            data:{
+                                order_id: order_id
+                            },
+                            dataType:'json',
+                            type:'post',
+                            timeout:10000,//超时时间设置为10秒；
+                            success:function(data){
+                                //服务器返回响应，根据响应结果，分析是否登录成功；
+                                if (data.result == 1) {
+                                    $("#cz").removeClass("mui-active");
+                                    $("#chongzhi").removeClass("mui-active");
+                                    $("#hm").addClass("mui-active");
+                                    $("#home").addClass("mui-active");
+                                    location.reload();
+                                }else {
+                                    mui.alert(data.message);
+                                }
+                            },
+                            error:function(xhr,type,errorThrown){
+                                //异常处理；
+                                module.message.error('出现错误，请重试！');
+                            }
+                        });
+                    } else {
+                        console.log("取消操作");
+                    }
+                })
+            })
+        });
+    </script>
+</body>

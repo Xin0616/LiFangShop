@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.enation.app.javashop</groupId>
+		<artifactId>javashop</artifactId>
+		<version>6.2.1</version>
+	</parent>
+	<groupId>com.enation.app.javashop</groupId>
+	<artifactId>goodsIndex-b2c</artifactId>
+	<version>6.2.1</version>
+	<name>goodsIndex-b2c</name>
+	<packaging>war</packaging>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.enation.app.javashop</groupId>
+			<artifactId>core</artifactId>
+			<version>6.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.enation.app.javashop</groupId>
+			<artifactId>shop-core</artifactId>
+			<version>6.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-facet</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.chenlb.mmseg4j</groupId>
+			<artifactId>mmseg4j-core</artifactId>
+			<version>1.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.chenlb.mmseg4j</groupId>
+			<artifactId>mmseg4j-solr</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.belerweb</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+		
+	<dependency>
+    <groupId>jdk.tools</groupId>
+    <artifactId>jdk.tools</artifactId>
+    <version>1.7</version>
+    <scope>system</scope>
+    <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+    </dependency>
+    
+   
+	</dependencies>
+
+	<build>
+		<finalName>goodsIndex</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

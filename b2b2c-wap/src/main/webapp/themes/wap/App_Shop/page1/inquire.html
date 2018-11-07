@@ -1,0 +1,45 @@
+<#assign title="账户明细" />
+<#include '/common/header.html'/>
+<#assign wealthListTag = newTag("wealthListTag")>
+<#assign wealthList = wealthListTag()>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>明细查询</title>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/echarge.css"/>
+</head>
+<body class="body-bg">
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">明细查询</h1>
+    </header>
+    <div class="mui-content">
+        <ul class="mui-table-view" id="inquire">
+	        <#list wealthList as wealth>
+            <li class="mui-table-view-cell">
+                <div class="inquire-content">
+                    <span><b><#if wealth.consume_type == 1>充值</#if><#if wealth.consume_type == 2>消费</#if></b></span>
+                    <br/>
+                    <span class="time"><@dateformat time="${wealth.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+                </div>
+                <div class="inquire-content num">
+                	￥${wealth.consume}
+                </div>
+            </li>
+            </#list>
+        </ul>
+    </div>
+
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<script>
+    /*查询明细表隔行变色*/
+    var list= document.getElementsByClassName("mui-table-view-cell");
+    for (i=0;i<list.length;i++) {
+        (i%2==0)?(list[i].className += " li_bg1"):(list[i].className += " li_bg2");
+    }
+</script>

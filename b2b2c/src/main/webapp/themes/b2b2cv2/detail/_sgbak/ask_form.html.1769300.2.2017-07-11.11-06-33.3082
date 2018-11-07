@@ -1,0 +1,33 @@
+<#include 'ask_list.html'/>
+<div id="ask_form_wrapper">
+	<form method="post" id="askForm"  >
+		<input type="hidden" name="goods_id" value="${goodsid}" />
+		<input type="hidden" name="commenttype" value="2" />
+		<h2>鍙戣〃鍜ㄨ</h2>
+		<label>
+			<h3>咨询内容：</h3>
+			<textarea  name="content" id="ask_content" maxlength="180" placeholder="请在此处输入您的问题"></textarea>
+		</label>
+ 		<div class="ask_btn" style="float:none;display:block;text-align:left;margin:10px 0px">
+			<a href="javascript:;" class="blue_btn" id="askBtn">提交咨询</a>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+$(function(){	
+
+	$("#askBtn").click(function(){
+		var cval = $('#ask_content').val();
+		if(cval == '' ){
+			$.message.error("咨询问题不能为空，请填写完整问题！");
+			return;
+		}
+		else if(cval.length > 180){
+			$.message.error("咨询问题过长，请简短咨询");
+			return;
+		}
+		CommentForm.formSubmit($(this),$("#askForm"));
+	});
+});
+</script>

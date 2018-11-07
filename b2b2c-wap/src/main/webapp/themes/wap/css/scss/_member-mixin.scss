@@ -1,0 +1,86 @@
+@import "color-config";
+
+@mixin no_border {
+    border: none;
+    outline: none;
+}
+
+@mixin flex_layout($flex-direction: row, $justify-content: flex-start, $align-items: center){
+    display: flex;
+    flex-direction: $flex-direction;
+    justify-content: $justify-content;
+    align-items: $align-items;
+}
+
+@mixin border-bottom($color: $themes_color){
+    border-bottom: 1px solid $color;
+}
+
+@mixin transition($time: 300ms, $type: ease-out){
+    -webkit-transition: all $time $type;
+    -moz-transition: all $time $type;
+    -ms-transition: all $time $type;
+    -o-transition: all $time $type;
+    transition: all $time $type;
+}
+
+@mixin nav_tab {
+    position: relative;
+    width: 100%;
+    height: 39px;
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 14px;
+    background-color: #fff;
+
+    .nav-item {
+        display: block;
+        float: left;
+        width: 50%;
+        text-align: center;
+        margin-top: -1px;
+        @include transition(100ms);
+        color: #333;
+
+        a {
+            display: inline-block;
+            @include border-bottom($themes_bg_light_color);
+            line-height: 39px;
+        }
+    }
+    .nav-item.active {
+        a {
+            color: $themes_color;
+            @include border-bottom($themes_color);
+        }
+    }
+
+    .nav-hr {
+        display: block;
+        position: absolute;
+        height: 20px;
+        width: 1px;
+        background-color: #e3e3e3;
+        top: 10px;
+        left: 50%;
+    }
+}
+
+@mixin nav-content {
+    position: relative;
+    .content-item {
+        position: relative;
+        display: none;
+        width: 100%;
+        &.show {
+            display: block;
+        }
+    }
+}
+
+@mixin text-ellipsis($clamp: 2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $clamp;
+    -webkit-box-orient: vertical;
+}

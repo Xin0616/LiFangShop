@@ -1,0 +1,61 @@
+@charset "UTF-8";
+/* 促销展示
+ ============================================================================ */
+/* 促销展示 */
+.goods-detail-box.activity {
+  display: flex;
+  position: relative;
+  font-size: 14px;
+}
+
+.title-activity {
+  margin-top: 5px;
+  width: 30px;
+  overflow: hidden;
+  color: #333;
+}
+
+.content-activity {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 28px;
+  overflow: hidden;
+  -webkit-transition: all 200ms ease-out;
+  transition: all 200ms ease-out;
+}
+
+.content-activity .item-activity {
+  margin: 5px 0;
+}
+
+.icon-activity {
+  border: 1px solid #ff002d;
+  padding: 2px;
+  text-align: center;
+  line-height: 15px;
+  font-size: 12px;
+  color: #ff002d;
+}
+
+.detail-activity {
+  color: #333;
+  margin-left: 10px;
+}
+
+.icon-content-activity {
+  display: block;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 15px;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAxElEQVRYR+2U0Q2CQBBEHx3YiXaglmDFWoJ2YglmyJ0x5ITbgYSf3R8+CLx3A7MDO8+wM58UyAQygTUJHIA78AZu5RputStQ4adCfAJXR8IR+IW/isARsCSiAlP4pQg8AEsiItCC6/trdM+S6BWYg9cfz5LoEeiB2xJLAhG4JTEn4MDDEv8E1sBDEi2BLeDdEi0B1ekMaMmo57Vq4TXbqKjerY35nZaANppmC/g0CR2mLq/x3lIL3FN3P5cCmUAmkAlkAh9VREIhITp8eQAAAABJRU5ErkJggg==") no-repeat center;
+  background-size: 70%;
+}
+
+.icon-content-activity.show {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAzUlEQVRYR+3VbQ3CMBSF4XcOkIADggKYBBSAFKQgBQlYwAFzQG6ykiWU3g+a7M/d3y49T0/Wu4GVn2HlfBKQDWQD2UCtgStwAE7Aq+OgugE7YL/cswa4z4AHMHZCSPgZeAJbDbABBCHaHogSPgHHec+P4ddH2AvRDBdF6xb8i1DDNYCsRxGmcAsggjCHWwEehCvcA7Ag3OFeQAsRCo8AagiZFReges+1SRr9GS1vh2SEwqMNlEMVhIzWrwmnnbysRxuw7q++l4BsIBvIBt6pp0IhfeYuUwAAAABJRU5ErkJggg==") no-repeat center;
+  background-size: 70%;
+}
+
+/*# sourceMappingURL=goods.css.map */

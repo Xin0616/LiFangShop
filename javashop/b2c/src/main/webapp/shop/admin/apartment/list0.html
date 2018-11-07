@@ -1,0 +1,141 @@
+<#include '/admin/header.html' >
+<div id="loading"></div>
+<div class="main">
+
+	<div class='buttonArea'>
+		<a class="button" onclick="del()">删除</a>
+		<a class="button" onclick="edit(-1)">添加</a>
+		<span style="float: right;"> 
+			<span id="simpleSearch">
+				<input id="searchName" class="input_text" type="text" maxlength="50" value="" size="30" style="width: 300px;"
+				placeholder="请输入小区名称" name="searchName"> 
+				<a class="button" onclick="searchApartments()">搜索</a>
+			</span>
+		</span>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="apartmentsform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/apartment/list-json.do?type=0',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="apartmentsdata" sortName="id" sortOrder="desc">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'name',width:200">小区名称</th>
+						<th data-options="field:'parent_name',width:200">所属商圈</th>
+						<th data-options="field:'create_time',width:200" formatter="formatDateline">创建时间</th>
+						<th data-options="field:'create_name',width:200">创建人</th>
+						<th data-options="field:'update_time',width:200" formatter="formatDateline">修改时间</th>
+						<th data-options="field:'update_name',width:200">修改人</th>
+						<th data-options="field:'action',width:100,align:'center'" formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+			<input type="hidden" name="type" value="0" />
+		</form>
+	</div>
+	<div id="editInfo"></div>
+</div>
+<script type="text/javascript">
+	function formatDateline(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' onclick='edit("+ row.id + ")' ></a>";
+		return val;
+	}
+
+	function searchApartments() {
+		var name = $("#searchName").val();
+		$("#apartmentsdata").datagrid('load', {
+			name : name,
+			type : 0,
+			page : 1
+		});
+	}
+
+	function del() {
+		var rows = $('#apartmentsdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择要删除的小区");
+			return;
+		}
+		if (!confirm("确认要删除选中的小区吗？")) {
+			return;
+		}
+		var options = {
+			url : "${ctx}/shop/admin/apartment/delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					searchApartments();
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#apartmentsform').ajaxSubmit(options);
+	}
+	
+	//修改
+	function edit(id) {
+		$("#editInfo").show();
+	　　	$('#editInfo').dialog({
+	　　		title: "编辑",			
+	　　		width: 550,
+	  		top:30,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/apartment/edit.do?type=0&id=' + id, 	
+	　　		modal: true,
+	　　		buttons: [{					
+				text:'确定',
+				iconCls:'icon-ok',
+				handler:function(){
+					var name = $("input[name='name']").val();
+					if(name != undefined && name != ""){
+						$.Loading.show("正在操作请稍候...");
+						$.ajax({
+							url : "${ctx}/shop/admin/apartment/save.do?ajax=yes",
+							type : "POST",
+							dataType : 'json',
+							data: {
+								id: id,
+								name: name,
+								type: 0
+							},
+							success : function(result) {
+		 						if (result.result == 1) {
+		 							$.Loading.success(result.message);
+		 							$("#editInfo").dialog('close');
+		 							searchApartments();
+		 						} else {
+		 							$.Loading.error(result.message);
+		 						}
+		 					},
+		 					error : function(e) {
+		 						$.Loading.error("出现错误 ，请重试");
+		 					}	
+				  		});
+	 			　　	}else{
+						$.Loading.error("请输入名称");
+	 			　　	}
+				}
+			},{					
+				text:'取消',
+				iconCls:'icon-ok',
+				handler:function(){
+					$("#editInfo").dialog('close');
+				}
+			}]
+		});
+	}
+</script>
+<#include '/admin/footer.html' >

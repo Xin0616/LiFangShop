@@ -1,0 +1,426 @@
+<#include '/common/header.html' />
+<#assign  title="商品列表" />
+<#assign searchSelectorTag= newTag("searchSelectorTag") />
+<#assign goodsSelector = searchSelectorTag() />
+<#assign goodsSearchTag= newTag("goodsSearchTag") />
+<#assign webpage = goodsSearchTag('{"pageSize":16}') />
+
+<#assign selected_cat= goodsSelector.selected_cat />
+<#assign selected_brand= goodsSelector.selected_brand />
+<#assign selected_price= goodsSelector.selected_price![] />
+
+<#assign catList= goodsSelector.cat />
+<#assign brantrist= goodsSelector.brand />
+<#assign sortList= goodsSelector.sort![] />
+<#assign priceList= goodsSelector.price![] />
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css">
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<style>
+	#top #navigator{
+		background-color:#e73602;
+		position: fixed;
+    	top: 0px;
+	}
+	.sort{
+		width: 100%;
+    	padding: 0;
+    	overflow: hidden;
+    	background: #fff;
+    	position:fixed;top:40px;z-index:99
+	}
+	.sort ul{
+	    width: 105%;
+    	text-align: center;
+    	height: 60px;
+    	overflow: hidden;
+    	margin: 0;
+	}
+	.goodslist{
+		background:#efeff4;
+	}
+	.goodslist ul{
+		margin-top:2%;
+	}
+	.goodslist ul li{
+		background:#fff;
+		position:relative;
+	}
+	.sort ul li a{
+		width: 33%;
+    	height: 48px;
+    	display: inline;
+    	float: left;
+   		border: 0px solid #d1d3d0;
+    	border-right: 0px none;
+    	line-height: 48px;
+    	text-align: center;
+    	color: #4b4c4c;
+    	font-size: 14px;
+	}
+	.sort ul li .selected{
+		background: #fff;
+    	color: #000;
+    	border-bottom:1px solid #E73602;
+	}
+	.goodslist ul .goods_list a{
+		height: 40px;
+    	width: 90%;
+    	margin: 0px 5%;
+    	font-size: 12px;
+    	display: block;
+    	color: #4b4c4c;
+    	overflow: auto;
+    	line-height:17px;
+	}
+	.sort ul .last a{border-right: 0px solid #d1d3d0; }
+	.goodslist ul .goods_list span{
+		    font-size: 16px;
+	}
+	.list .goods_list .buy{
+		font-size:12px;
+		text-align: center;
+    	color: #686868;
+    	padding:2px 5px;
+    	border:1px solid #bfbfbf;
+    	position:absolute;
+    	bottom:1%;
+    	right:0;
+    	margin:0 5px;
+    	border-radius:2px; 
+	}
+	/* 加入购物车样式	 */	
+		p {
+				text-indent: 22px;
+			}
+			span.mui-icon {
+				font-size: 14px;
+				color: #007aff;
+				margin-left: -15px;
+				padding-right: 10px;
+			}
+	/* 加入购物车样式	 */	
+		#picture .goods_cut,#picture .goods_add,#picture .goodsnum{
+			    color: #131927;
+			    display: inline-block;
+			    width: 25px;
+			    height: 25px;
+			    border: 1px solid #98999e;
+			    background: #e2e2e2;
+			    line-height: 25px;
+			    text-align: center;
+			    font-size: 14px;
+			    font-weight: bold;
+			    vertical-align: inherit;
+		}
+		#picture .goodsnum{
+			width:55px;
+			height:30px;
+		}
+		#picture .cart-change{
+			width:100%;
+			position:fixed;
+			bottom:0;
+			background:#000;
+			opacity:0.9;
+			text-align:center;
+			padding:10px;
+		}
+		#picture .cart-change>p,#picture .goods_num>p{color:#fff}
+		#picture .goods_num{
+			width: 100%;
+		}
+		#picture .goods_num p{
+			float: left;
+		    display: inline;
+		    height: 42px;
+		    line-height: 42px;
+		    color: #fff;
+		}
+		#picture .goods_num label{
+			float: left;
+		    display: inline;
+		    margin: 0 5%;
+		    margin-top:10px;
+		    height: 40px;
+		}
+		#picture .goods_num label input{
+			text-align: center;
+		    width: 50px;
+		    height: 25px;
+		    line-height: 25px;
+		    float: left;
+		    display: inline;
+		    border: 1px solid #98999e;
+		    border-left: 0px none;
+		    border-right: 0px none;
+		    background: #fff;
+		    font-size: 14px;
+		}
+		#picture .goods_num label span{
+			float: left;
+		    color: #131927;
+		    display: block;
+		    width: 25px;
+		    height: 25px;
+		    border: 1px solid #98999e;
+		    background: #e2e2e2;
+		    line-height: 25px;
+		    text-align: center;
+		    font-size: 14px;
+		    font-weight: bold;
+		}
+		#picture .add_cart{
+			width: 27%;
+		    height: 40px;
+		    line-height: 20px;
+		    overflow: hidden;
+		    text-align: center;
+		    border-radius: 10px;
+		    font-size: 0.95em;
+		    font-weight: normal;
+		    color: #fff;
+		    margin-right: 2%;
+		    display: inline;
+		    border: 0px none;
+		    background: #eb5428;
+		}
+		.faqlist{
+			    margin-top: 60px;
+		}
+</style>
+<div style="width:100%;height:45px;"></div>
+<div class="sort">
+    <ul class="goods-list-selector">
+        <#assign seachUrlTag= newTag("seachUrlTag") />
+        <#assign searchUrl=seachUrlTag('"name":"sort"')!'search' />
+        <#assign searchParamTag= newTag("searchParamTag") />
+        <#assign sort=searchParamTag('"name":"sort"')!'0' />
+
+        <#list sortList as selector >
+            <li data-href="${selector.url!''}"
+            <#if !selector_has_next>class="last"</#if>
+            ><a href="javascript:;"
+            <#if selector.isSelected>class="goods-list-selector selected ${selector.value}"</#if>
+            >${selector.name}</a></li>
+        </#list>
+    </ul>
+</div>
+<div class="faqlist">
+    <div class="goodslist">  
+        <#assign goodsSearchTag= newTag("goodsSearchTag") />
+        <#assign webpage = goodsSearchTag('{"pageSize":10,"pageNo":${page!1},"url":"search-cat-1.html"}') />
+
+        <ul class="list">
+            <#list webpage.result as goods>
+                <li class="goods_list" rel='${goods.goods_id}'>
+                    <a href='${ctx}/goods-${goods.goods_id}.html' style="height: 170px; overflow: hidden;">
+                        <@image src="${goods.thumbnail!''}" alt="${goods.name}"/>
+                        <a href="${ctx}/goods-${goods.goods_id}.html" style="overflow:auto" class="name-recommend">
+                            ${goods.name}
+                        </a>
+                        <span class="price">￥${goods.price}</span>
+						<input type="hidden" class="goodsid" value="${goods.goods_id}">
+						<input type="hidden" class="storeid" value="${goods.store_id}">
+                        <span class="buy" style="width:80px"><a href="#picture" style="height:20px;line-height:20px">加入购物车</a></span>
+                    	<input type="hidden" class="goods_s" value="${goods.enable_store!'0'}" />
+                    </a>
+                </li>
+            </#list>
+        </ul>
+    </div>
+    <div class="list_page" style="margin-top:20px;">
+        <@pager pageno="${webpage.currentPageNo}" pagesize="${webpage.pageSize}" totalcount="${webpage.totalCount}" />
+    </div>
+
+</div>
+<div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
+			<div class="cart-change">
+				<p>商品名称：<span class="shop_name"></span></p>
+				<p>价格： <span class="shop_price"></span></p>
+				<p>规格： <span class="shop_other"></span></p>
+				<input type="hidden" class="goods_tools" goodsid="0" storeid="0">
+				<div class="goods_num">
+					<p>数量：</p>
+					<label><span class="goods_cut">-</span><input type="text" value="1" class="goodsnum" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"/><span class="goods_add">+</span></label>
+					<p class="goods_s">库存：<span class="store_num">2</span></p>
+				</div>
+				<br> 
+				<input type="button" class="add_cart"  value="加入购物车"/>
+			</div>
+		</div>
+		<input type="hidden" id="url" value="/App_Shop/page1/index.html">
+		<div id="mypopup">
+			
+			<div class="prompt">
+				<p id="wxts">温馨提示</p>
+				<p id="hintinfo"></p>
+				<a id="closepopup">确定</a>
+			</div>
+		</div>
+<script>
+    $(function () {
+        var sortnum = $(".sort_num").text()
+        var module = new Module();
+        var url = $("#url").val();
+        backHistory();
+        function backHistory() {
+            module.navigator.init({
+                title: '商品列表',
+                left : {
+                    click: function () {
+                    	location.href = ctx + url;
+                    }
+                }
+            });
+        }
+
+    	if(isAndroid){
+         	//手机物理后退键按钮
+        	document.addEventListener("backbutton", onBackKeyDown, false);
+    	}
+		//切换搜索状态换页展示
+        $('.goods-list-selector li').on('tap', function () {
+        	var url = $(this).attr('data-href');
+        	var i = url.indexOf("page=");
+        	if(i>=0){
+            	$(this).attr('data-href', url.substring(0, i+5) + "1");
+        	}
+            location.replace($(this).attr('data-href'));
+            return false
+        })
+		//购物车模态框展示
+        $(".buy").on("tap",function(){
+        	//价钱
+        	var shop_price = $(this).parent().find('.price').text();
+        	//库存
+        	var store_num = $(this).parent().find('.goods_s').val();
+        	//商品名称
+        	var shop_name = $(this).parent().find('.name-recommend').text();
+        	$('.shop_name').text(shop_name);
+        	$('.shop_price').text(shop_price);
+        	$('.store_num').text(store_num);
+        	$(".goods_tools").attr("goodsid", $(this).parent().find('.goodsid').val());
+        	$(".goods_tools").attr("storeid", $(this).parent().find('.storeid').val());
+
+        })
+      //加入购物车加减按钮操作
+		//减
+		$(".goods_cut").click(function(){
+			var goodsnum = parseInt($(".goodsnum").val());
+			if(goodsnum>1){
+				$(".goodsnum").val(goodsnum-1);
+			}
+			else{
+				$("#hintinfo").text("抱歉，最少需要一件商品");
+				popup.show();
+				$("#closepopup").on("tap",function(){
+					popup.hide();
+				});	
+			}
+		});
+		//加
+		$(".goods_add").click(function(){
+			var store = parseInt($(".store_num").text());
+			var goodsnum = parseInt($(".goodsnum").val());
+			if(goodsnum<store){
+				$(".goodsnum").val(goodsnum+1);
+			}
+			else{
+				$("#hintinfo").text("抱歉，购买商品不能大于库存");
+				popup.show();
+				$("#closepopup").on("tap",function(){
+					popup.hide();
+				});	
+			}
+		});
+		//验证num框
+		$(".goodsnum").blur(function(){
+			var goodsnums = parseInt($(this).val());
+			//验证库存
+			if(goodsnums>store){
+				$("#hintinfo").text("请输入小于库存的数量");
+				popup.show();
+				$("#closepopup").on("tap",function(){
+					popup.hide();
+				});
+				$(this).val(parseInt(1));
+			}
+			//验证数量
+			if(goodsnums<1){
+				$("#hintinfo").text("最少买一件哦");
+				popup.show();
+				$("#closepopup").on("tap",function(){
+					popup.hide();
+				});	
+				$(this).val(parseInt(1));
+			}
+		});
+		//加入购物车
+		$('.add_cart').on("tap",function(){
+				var gnuma = $(".goodsnum").val();
+				var gida = $(".goods_tools").attr("goodsid");
+				var addstoreid = $(".goods_tools").attr("storeid");
+				var productid = $("#productid").val();
+				$.ajax({
+					url: ctx + "/api/store/store-cart/add-goods.do?goodsid="+gida+"&store_id="+addstoreid+"&num="+gnuma,
+					dataType:"json",
+					success : function(data) {	
+						if(data.result==1){	
+							show.close_cover();
+							$("#picture").removeClass("mui-active");
+							$("#picture").hide();
+							$(".mui-backdrop-action").remove();
+							
+							$("#hintinfo").text("加入购物车成功");
+							
+							popup.show();
+							$("#closepopup").on("tap",function(e){
+								popup.hide();
+								e.stopPropagation();
+							});				                	
+							$.ajax({
+								url: ctx + "/api/shop/cart/get-cart-data.do",
+								dataType:"json",
+								success:function(result){
+									if(result.result==1){  
+										var goodscartnum = result.data.count;
+										$(".my_cart span").empty();
+										$(".my_cart span").text(goodscartnum);
+									}else{
+										show.close_cover();          //关闭遮罩
+										$("#hintinfo").text(result.message);
+										popup.show();
+										$("#closepopup").on("tap",function(){
+											popup.hide();
+										});	
+									}
+								},error:function(){
+									show.close_cover();
+									$("#hintinfo").text("抱歉，收藏出现意外错误");
+									popup.show();
+									$("#closepopup").on("tap",function(){
+										popup.hide();
+									});	
+									
+				                	
+								}
+							});
+						}
+						else{	
+							show.close_cover();          //关闭遮罩
+							$("#hintinfo").text(data.message);
+							popup.show();
+							$("#closepopup").on("tap",function(){
+								popup.hide();
+							});	
+						}
+					}
+				})
+			})
+    })
+
+</script>
+</body>
+</html>

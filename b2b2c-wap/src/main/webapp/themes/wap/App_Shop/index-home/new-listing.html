@@ -1,0 +1,39 @@
+<#-- 新品上市 -->
+    <#assign goodsListTag = newTag("goodsListTag") />
+    <#-- 调用商品列表标签，并传递商品列表所在catid及循环次数 -->
+    <#assign newList = goodsListTag("'tagid':'3','goodsnum':'10'") />
+        <div id="slider" class="mui-slider">
+            <div class="title-tag-goods">
+                <div class="icon-tag-goods new">
+                    <img src="${ctx}${themes_path}/App_Shop/myimages/mine/xinpin.png" alt=""/>
+                </div>
+                <div class="name-tag-goods new">新品上市</div>
+            </div>
+            <div class="mui-slider-group mui-slider-loop">
+                <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                <#if (newList?size > 0) > 
+				    <#assign index = newList?size -1>
+				    <#assign lastGood = newList[index]>
+                    <div class="mui-slider-item mui-slider-item-duplicate" style="width:25%">
+                        <a href="${ctx}/goods-${lastGood.goods_id}.html">
+                            <@image src="${lastGood.thumbnail!''}" alt="${lastGood.name!''}" />
+                            <p class="price">￥${lastGood.price?string("0.00")}</p>
+                            <!--<p class="mktprice">￥${lastGood.mktprice?string("0.00")}</p>-->
+                            <i class="icon"></i>
+                        </a>
+                    </div>
+                    <#list newList as goods>
+                    <div class="mui-slider-item" data-href="${ctx}/goods-${goods.goods_id}.html" style="width:25%">
+                        <a href="${ctx}/goods-${goods.goods_id}.html">
+                            <@image src="${goods.thumbnail!''}" alt="${goods.name!''}" />
+                            <p class="price">￥${goods.price?string("0.00")}</p>
+                            <!--<p class="mktprice">￥${goods.mktprice?string("0.00")}</p>-->
+                            <i class="icon"></i>
+                        </a>
+                    </div>
+                    </#list>
+                <#else/>
+                    <div>没有数据。。。</div>
+                </#if>
+            </div>
+        </div>

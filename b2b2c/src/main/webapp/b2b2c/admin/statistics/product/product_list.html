@@ -1,0 +1,129 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+</style>
+<div class="main">
+
+	<div class="shadowBoxWhite whiteBox">
+		
+			<span style="float: right;"> 
+			<span id="simpleSearch">
+			日期：
+			<input class="easyui-datebox" style="width: 190px;height: 28px;" id="start_time" />
+                        <span>&nbsp;~&nbsp;</span>
+                        <input class="easyui-datebox" style="width: 190px;height: 28px;" id="end_time" />
+			商品名称 ：<input class="input_text" style="width: 190px;height: 28px;" type="text" id="name" name="name"  
+						></input>
+				<input class="input_text"  type="hidden" id="name1" name="name1"  
+						></input> 
+				<a class="button" onclick="searchApartments()">搜索</a>
+			</span>
+		</span>
+	
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite whiteBox">
+		<table cellpadding="5" width="100%">
+			<tr>
+				<th class="title" colspan="4">总览概括</th>
+			</tr>
+			<tr>
+				<th width="50px;"></th>
+				<td style="text-align: left;">
+					<div class="deliveryexp price">
+						<span>单数:&nbsp;&nbsp;<span id="danshu" >${danshu!0}</span></span>
+						<span>数量:&nbsp;&nbsp;<span id="shuliang" >${shuliang!0}</span></span>
+						<span>金额:&nbsp;&nbsp;<span id="jine" >${jine!0}</span></span>
+					</div>
+				</td>
+				
+			</tr>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid" 
+			data-options="url:'${ctx}/b2b2c/admin/productSales/sale-income-json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true',queryParams:{'complete':'${complete!''}'}"
+			pagination="true" width="width" id="productdata" sortName="order_id" sortOrder="desc">
+			<thead>
+				<tr>
+					<!-- <th data-options="field:'order_id',checkbox:true,width:100"></th> -->
+					<th  data-options="field:'create_time',width:100"  >时间</th>
+					<th data-options="field:'commodity_name',width:100" >商品名称</th>
+					<th data-options="field:'price',width:100" >销售单价</th>
+					<th data-options="field:'sale_count',width:100">销售单数</th>
+					<th data-options="field:'order_count',width:100">下单数量</th>
+					<th data-options="field:'number',width:100">销售数量</th>
+					<th data-options="field:'money',width:100">金额</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+
+	$("#name").combobox({
+		disabled : false,
+		url : '${ctx}/b2b2c/admin/productSales/batteryCombox.do',
+		cache : false,
+		valueField : 'name',
+		textField : 'name',
+		hasDownArrow : false,
+		onChange : function(newValue,oldValue){
+			$("#name").val("name", "");
+		
+		},
+		onSelect : function(rec) {
+			$("#name1").val(rec.name);
+	
+		
+		
+		}
+	});	
+});
+	
+
+function searchApartments() {
+	var product = $("#name1").val();
+	
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue'); 
+	if(start_time != '' && end_time != ''){
+		if(end_time < start_time){
+			$.Loading.error("结束时间不能小于开始时间");
+			return ;
+		}
+	}
+	
+	$.ajax({
+		url : "${ctx}/b2b2c/admin/productSales/sale-income-totle-json.do?product="+product+"&start_time="+start_time+"&end_time="+end_time,
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if (result.result == 1) {
+				$("#danshu").html(result.data.danshu);
+				$("#shuliang").html(result.data.shuliang);
+				$("#jine").html(result.data.jine);
+			}
+			if (result.result == 0) {
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	});
+	$("#productdata").datagrid('load', {
+		product : product,
+		start_time : start_time,
+		end_time : end_time,
+		page:1
+    }); 
+	
+}
+
+</script>
+
+
+
+<#include '/admin/footer.html' >

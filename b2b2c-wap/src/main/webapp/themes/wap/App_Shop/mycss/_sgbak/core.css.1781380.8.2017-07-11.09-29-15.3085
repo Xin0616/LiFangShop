@@ -1,0 +1,116 @@
+html{
+	width: 100%;
+	height: 100%;
+}
+
+body{
+	font-size: 14px;
+	font-family: "微软雅黑";
+	color: #333333;
+}
+
+/*头部*/
+header{
+	font-size: 16px !important;
+	background-color: #e73602 !important;
+}
+header a, header h1{
+	color: #FFFFFF !important;
+}
+
+/*大字号*/
+.font-size-big{
+	font-size: 16px !important;
+}
+
+/*中字号*/
+.font-size-middle{
+	font-size: 14px !important;
+}
+
+/*小字号*/
+.font-size-small{
+	font-size: 12px !important;
+}
+/*input输入框提示字样式*/
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+	color: #cccccc;
+}
+input:-moz-placeholder, textarea:-moz-placeholder {
+	color:#cccccc;
+}
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+	color:#cccccc;
+}
+input, select, textarea{
+	font-size: 14px;
+	color: #333333;
+	letter-spacing: 1px;
+}
+/*底部分页内容区域头部边距*/
+.mui-bar-nav~.mui-content{padding-top:40px;}
+
+/*选项卡主内容区域边距*/
+.title{
+	margin: 20px 15px 10px;
+}
+/*底部选项卡字体颜色*/
+.mui-bar-tab .mui-tab-item.mui-active{
+	color: #e73602;
+}
+/*追加after的下划线样式*/
+.mui-table-view-cell:after{left:0}
+/*字体间距*/
+.mui-content{letter-spacing:1px}
+		/*--------------弹出框---------------------*/
+#mypopup{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2001;
+}
+
+#mypopup .prompt{
+    border-radius: 5px;
+    width: 90%;
+    height: 200px;
+    position: fixed;
+    left: 5%;
+    top: 35%;
+    z-index: 99999;
+    background: #F5F5F5;
+}
+#hintinfo{
+    display: block;
+    box-sizing: border-box;
+    height: 100px;
+    line-height: 30px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    border-bottom: 1px solid #DDDDDD;
+}
+#mypopup .prompt a{
+    display: block;
+    line-height: 40px;
+    font-size: 14px;
+    color:#40AFFE ;
+    text-align: center;
+    background:#f2f2f2;
+}
+#mypopup #wxts{
+	width:100%;
+	background:#e73602;
+	height:45px;
+	text-align:center;
+	line-height:45px;
+	color:#fff;
+	border-radius:5px 5px 0 0;
+}
+/*弹出框结束*/
+	

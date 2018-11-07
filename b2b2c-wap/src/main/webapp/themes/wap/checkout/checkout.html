@@ -1,0 +1,137 @@
+<#assign  title="商品结算" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag()!'' />
+<#if member??>
+	<#-- 创建订单结算检测标签 -->
+	<#assign b2b2cOrderSettleCheckTag= newTag("b2b2cOrderSettleCheckTag")>
+	<#-- 获取订单检测结果地址  -->
+	<#assign checkResult = b2b2cOrderSettleCheckTag() />
+
+    <#assign region_id = 0 >
+    <#assign defaultConsigneeTag= newTag("defaultConsigneeTag") />
+    <#assign defAddress = defaultConsigneeTag()!'none' >
+    <#if defAddress!='none'><#assign region_id = defAddress.region_id /></#if>
+
+    <#-- 创建会员默认支付方式和配送方式和送货日期标签 -->
+    <#assign orderPaymentDlytypeTag= newTag("orderPaymentDlytypeTag") />
+    <#-- 获取会员默认支付方式和配送方式和送货日期 -->
+    <#assign pd = orderPaymentDlytypeTag() />
+    <#assign type_id = pd.dlytype.type_id />
+
+	<#-- 创建购物车标签 -->
+	<#assign cartTag= newTag("storeCartSelectGoodsTag")>
+	<#-- 通过购物车标签获取购物项列表 -->
+	<#assign itemList = cartTag("'countship':'yes'")>
+	
+    <#-- 创建结算订单金额标签 -->
+    <#assign orderPriceTag = newTag("orderPriceTag") />
+    <#assign orderPrice = orderPriceTag() />
+
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/checkout.css" />
+    <script type="text/javascript" src="${ctx}/statics/e_tools/js/library/jquery.cookie.min-1.4.1.js"></script>
+    <script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/checkout.js"></script>
+    <!-- 商品结算 -->
+   	<div style="width:100%;height:45px;"></div>
+    <div class="checkout">
+        <!--收货地址-->
+        <div class="eui-item address-list">
+            <div class="eui-inner-item">
+                <#if defAddress!='none'>
+                    <a href="javascript:location.replace('../member/address-list.html?back=checkout');" class="eui-block">
+                        <div class="title-def-address">
+                            <div class="title-def-address-name">${defAddress.name!''}</div>
+                            <div class="title-def-address-phone">${defAddress.mobile?substring(0,3)}****${defAddress.mobile?substring(7,11)}</div>
+                            <div class="title-def-address-default" id="address-default">
+                                默认
+                            </div>
+                        </div>
+                        <div class="contnet-def-address">
+                            <i class="location-icon"></i>
+                            <span class="address-where">${defAddress.addr!''}</span>
+                            <input type="hidden" name="addressId" value="${defAddress.addr_id!''}">
+                        </div>
+                    </a>
+                <#else />
+                    <div class="no-address">新建收货地址以确保商品顺利送达</div>
+                </#if>
+            </div>
+            <#if defAddress!='none'>
+                <i class="eui-item-point"></i>
+            </#if>
+        </div>
+        <div class="address-list-hr"></div>
+
+        <!--商品清单-->
+        <div class="eui-item checkout-cart">
+            <div class="eui-inner-item">
+            <!--商品条目-->
+                <#include './checkout-cart.html'/>
+            </div>
+        </div>
+
+        <!--备注信息-->
+        <div class="eui-item checkout-remark">
+            <div class="eui-inner-item eui-hr-top">
+                <a href="javascript:;" class="eui-block" id="open-remark">
+                    <div class="title-bonus">
+                        备注信息：
+                    </div>
+                    <div class="use-bonus view-remark" id="view-remark">
+                        未填写
+                    </div>
+                    <input type="hidden" name="remark" id="data-remark" value="">
+                    <div style="clear: both;"></div>
+                </a>
+            </div>
+            <i class="eui-item-point"></i>
+        </div>
+
+        <!--金额统计-->
+        <div class="eui-item checkout-count">
+            <div class="eui-inner-item">
+                <div class="count-item">
+                    <div class="title-count-item">商品金额</div>
+                    <div class="value-count-item">￥${orderPrice.goodsPrice?string("0.00")}</div>
+                </div>
+
+<!--                 <div class="count-item"> -->
+<!--                     <div class="title-count-item">运费</div> -->
+<!--                     <div class="value-count-item">￥${orderPrice.shippingPrice?string("0.00")}</div> -->
+<!--                 </div> -->
+                <div class="count-item">
+                    <div class="title-count-item">配送费</div>
+                    <div class="value-count-item">￥${orderPrice.deliveryFeePrice?string("0.00")}</div>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="height: 50px; clear: both;"></div>
+
+        <!--提交订单浮动-->
+        <div class="submit-order">
+            <div class="left-submit-order">
+                <div class="inner-left">
+                    应付款：
+                    <#assign _price  = orderPrice.needPayMoney?string("0.00") />
+                    <#assign _length = _price?length />
+                    <span>￥ <span class="big-price">${_price?substring(0, _length - 3)}</span>${_price?substring(_length - 3, _length)}</span>
+                </div>
+            </div>
+            <div class="right-submit-order" id="cerate-order">
+                提交订单
+            </div>
+        </div>
+    </div>
+
+	<#if checkResult.result == 1 >
+        <script type="text/javascript">
+		    alert("${checkResult.errorMessage!''}");
+        </script>
+	</#if>
+</#if>
+<input type="hidden" id="url" value="/App_Shop/page1/index.html">
+</body>
+</html>

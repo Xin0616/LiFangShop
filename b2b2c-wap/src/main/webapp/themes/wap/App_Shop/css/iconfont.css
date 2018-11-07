@@ -1,0 +1,30 @@
+
+@font-face {font-family: "iconfont";
+  src: url('../fonts/iconfont.ttf?t=1495176357505') format('truetype'); /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+.icon-gouwuche:before { content: "\e606"; }
+
+.icon-tuichu:before { content: "\e601"; }
+
+.icon-dingdan:before { content: "\e613"; }
+
+.icon-chongzhi:before { content: "\e663"; }
+
+.icon-tuangouicon:before { content: "\e62d"; }
+
+.icon-fenlei:before { content: "\e612"; }
+
+.icon-zhiding:before { content: "\e602"; }
+
+.icon-wode-copy:before { content: "\e607"; }
+
+.icon-shouye-shouye:before { content: "\e632"; }
+

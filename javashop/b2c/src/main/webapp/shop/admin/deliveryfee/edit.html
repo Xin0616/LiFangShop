@@ -1,0 +1,121 @@
+<#include '/admin/header.html' >
+<#if (dfList?size > 0)>
+	<#assign price=dfList[0].price />
+</#if>
+<div id="loading"></div>
+<div class="main">
+	<form id="lvform">
+		<table id="myTable" width="75%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<th>统一配送费(元)：</th>
+				<td><input class="input_text easyui-numberbox price" type="text"
+					maxlength="9" data-options="required:true,min:0,precision:2" value="${price!''}" />
+				</td>
+			</tr>
+			<#if (dfList?size > 0)>
+				<#list dfList as df>
+					<tr class="list">
+						<th>满(元)：</th>
+						<td><input class="input_text easyui-numberbox full" type="text"
+							maxlength="9" data-options="required:true,min:0,precision:2" value="${df.full}"></input>
+						</td>
+						<th>减(元)：</th>
+						<td><input class="input_text easyui-numberbox minus" type="text"
+							maxlength="9" data-options="required:true,min:0,precision:2" value="${df.minus}"></input>
+						</td>
+						<td>
+							<#if !df_has_next>
+								<input type="button" value="添加" onclick="addTr(this);"/>
+							<#else>
+								<input type="button" value="删除" onclick="deteleTr(this);"/>
+							</#if>
+						</td>
+					</tr>
+				</#list>
+			</#if>
+		</table>
+		<div class="buttonWrap fixed" style="position:absolute;left:0px;bottom:0px;">
+			<a id="searchAdvance" class="easyui-linkbutton" onclick="submitForm()"
+				href="javascript:;">保存</a>
+		</div>
+	</form>
+</div>
+<table id="addHtml" style="display: none;">
+	<tr class="list">
+		<th>满(元)：</th>
+		<td><input class="input_text easyui-numberbox full" type="text"
+			maxlength="9" data-options="required:true,min:0,precision:2"></input>
+		</td>
+		<th>减(元)：</th>
+		<td><input class="input_text easyui-numberbox minus" type="text"
+			maxlength="9" data-options="required:true,min:0,precision:2"></input>
+		</td>
+		<td>
+			<input type="button" value="添加" onclick="addTr(this);"/>
+		</td>
+	</tr>
+</table>
+<script type="text/javascript">
+	function deleteTr(obj){
+		$(obj).parent().parent().remove();
+	}
+	function addTr(obj){
+		var html = $("#addHtml").html();
+		$("#myTable").append(html);
+		$(obj).attr("onclick", "deleteTr(this);");
+		$(obj).val("删除");
+	}
+	function submitForm(){
+		var _list = [];
+		var str = "";
+		var flag = true;
+		if($(".price").val()==undefined || $(".price").val()==""){
+			$.Loading.error("请填写统一配送费");
+			return;
+		}
+		$("#myTable .list").each(function(){
+			var obj = {
+				price: parseFloat($(".price").val()),
+				full: parseFloat($(this).find(".full").val()),
+				minus: parseFloat($(this).find(".minus").val())
+			};
+			if($(this).find(".full").val()!=$(this).find(".minus").val()){
+				if($(this).find(".full").val()==undefined || $(this).find(".full").val()=="" || $(this).find(".minus").val()==undefined || $(this).find(".minus").val()==""){
+					str = "所填信息不全，请检查";
+					flag = false;
+					return;
+				}
+			}
+			if(obj.price < obj.minus){
+				str = "配送费可能出现负数，请检查";
+				flag = false;
+				return;
+			}
+			_list.push(obj);
+		});
+		if(flag){
+			$.ajax({
+				contentType : 'application/json',
+				url : "${ctx}/shop/admin/delivery-fee/save.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				data : JSON.stringify(_list),
+				success : function(result) {
+					$.Loading.success(result.message);
+					if (result.result == 1) {
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			});
+		}else{
+			$.Loading.error(str);
+		}
+		
+	}
+</script>
+<#include '/admin/footer.html' >

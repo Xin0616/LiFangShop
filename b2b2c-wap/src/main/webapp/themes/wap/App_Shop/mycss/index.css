@@ -1,0 +1,10 @@
+/*商品分类部分样式css*/
+#fenlei #cat-wrapper ul li img{
+	width: 65%;
+	height: 65%
+}
+#fenlei #cat-wrapper ul li .mui-media-body{
+	font-size:14px;
+	text-align:center;
+	vertical-align: middle;
+}

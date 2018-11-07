@@ -1,0 +1,89 @@
+		<#assign  title="会员登录" />
+		<#include '/common/header.html'/>
+		<#assign apartListTag = newTag("apartmentListTag")>
+        <#assign apartmentList = apartListTag('{"type":0}')>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>登录</title>
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/login.css"/>
+
+	<body class="body-bg">
+		
+	</body>
+		
+		<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+        <script src="${ctx}${themes_path}/App_Shop/js/layer/layer.js"></script>
+        <script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+		<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+		<script>	
+			/* if(isAndroid){
+				document.addEventListener("backbutton", onBackKeyDown2, false);
+				function onBackKeyDown2(e) {
+				   e.preventDefault();
+				   layer.open({
+		               content: '确定退出程序吗？',
+		               btn: ['确定', '取消'],
+		               yes: function(index){
+		            	   exitApp();
+		                   layer.close(index);
+		               }
+		           });
+				}
+
+				function exitApp(){
+					navigator.app.exitApp();
+				}
+			} */
+			$(function(){
+				var username;
+				var password;
+				var username=localStorage.username;//获取存储的变量key的值;
+				var password=localStorage.password;
+				var check=localStorage.check;
+				if(!username || !password ){
+					window.location.href = ctx + "/App_Shop/login/login2.html";
+				}else{
+					if(check == "yes"){
+						$myAjax({
+			                url:ctx + '/api/shop/member/login.do',
+			                data:{
+			                    username: username,
+			                    password: password
+			                },
+			                dataType:'json',
+			                type:'post',
+			                timeout:10000,//超时时间设置为10秒；
+			                success:function(data){
+			                    //服务器返回响应，根据响应结果，分析是否登录成功；
+			                	if (data.result == 1) {
+			                		if(data.message == "0"){
+			                            window.location.href = ctx + "/App_Shop/page2/index.html";
+			                		}else{
+			                            window.location.href = ctx + "/App_Shop/page1/index.html";
+			                        }
+			                    }else {
+			                    	$("#hintinfo").text(data.message);
+			                        popup.show();
+			                		$("#closepopup").on("tap",function(){
+			                			popup.hide();
+			                		});
+			                    }
+			                },
+			                error:function(xhr,type,errorThrown){
+			                    //异常处理；
+			                	$("#hintinfo").text('出现错误，请重试！');
+			                	popup.show();
+			            		$("#closepopup").on("tap",function(){
+			            			popup.hide();
+			            		});
+			                }
+			            });
+					}else{
+						window.location.href = ctx + "/App_Shop/login/login2.html";
+					}
+					 
+				}
+			})
+		</script>	

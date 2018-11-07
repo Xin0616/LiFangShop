@@ -1,0 +1,39 @@
+<#assign  title="店铺街" />
+<#include '/common/header.html' />
+<#assign storeSearchTag = newTag("storeSearchTag") />
+<#assign storeSearch = storeSearchTag() />
+<#assign storeList = storeSearch.list.result />
+<div style="width:100%;height:45px"></div>
+<#if storeList?size gt 0>
+    <div class="storelist">
+        <ul>
+            <#list storeList as store>
+                <li>
+                    <a href="${ctx}/store/store-index.html?show_c=1&store_id=${store.store_id!0}">
+                        <h1>${store.store_name}</h1>
+                        <#if store.store_banner?? && store.store_banner!=''>
+                            <@image alt="" src="${store.store_banner!''}" />
+                            <#else/>
+                            <img src="${ctx}${themes_path}/images/home_def.jpg" id="img_store_banner">
+                        </#if>
+                    </a>
+                </li>
+            </#list>
+        </ul>
+    </div>
+    <div class="list_page" style="margin-top:20px;">
+        <@pager pageno="${storeSearch.page!'1'}" pagesize="${storeSearch.pageSize}" totalcount="${storeSearch.totalCount}"
+        />
+    </div>
+<#else/>
+    <div class="eui-nodata">
+        <img src="${ctx}/statics/e_tools/images/beifang/beifang-no_data.png">
+    </div>
+</#if>
+
+<script type="text/javascript">
+    $(function () {
+        var module = new Module();
+        module.navigator.init("店铺街");
+    })
+</script>

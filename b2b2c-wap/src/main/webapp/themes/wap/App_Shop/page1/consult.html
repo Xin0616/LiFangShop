@@ -1,0 +1,56 @@
+<#assign  title="我的咨询" />
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<!-- 调用会员咨询列表标签 -->
+<#assign memberAskList = memberAskListTag()>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>我的咨询</title>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/msg.css"/>
+<body class="body-bg">
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">我的咨询</h1>
+    </header>
+    <div class="mui-content" style="padding-top:50px">
+        <div id="consult" >
+            <#if memberAskList?size gt 0 >
+            <ul class="mui-table-view">
+                <#list memberAskList.commentsList as comment>
+                <li class="mui-table-view-cell">
+                    <div class="consult-content1">
+                        ${comment.name}
+                        <span class="right">
+                            <#if comment.status == 1 >
+                                <b style="color:#86DB48">审核通过</b>
+                                <#elseif comment.status == 2>
+                                    <b style="color:#e73602">审核拒绝</b>
+                                <#else>
+                                    <b style="color:#D84C29">待审核</b>
+                            </#if>
+                        </span>
+                        <p class="font-size-small"><@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></p>
+                    </div>
+                    <div class="consult-content2">
+                        我的咨询：${comment.content}
+                        <#if comment.replystatus == 1>
+                            <div class="kefu">
+                                客服回复：${comment.reply}
+                            </div>
+                        </#if>
+                    </div>
+                </li>
+                </#list>
+            </ul>
+            <#else>
+                <p class="no_commont">暂无咨询</p>
+            </#if>
+        </div>
+        <@pager pageno="${memberAskList.page!'1'}" pagesize="${memberAskList.pageSize}" totalcount="${memberAskList.totalCount}" />
+    </div>
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>

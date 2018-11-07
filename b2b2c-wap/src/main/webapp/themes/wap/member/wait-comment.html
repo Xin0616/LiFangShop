@@ -1,0 +1,45 @@
+<#assign  title=" 待评论商品" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag("{'goodsnum': 1000}") />
+<#if member??>
+    <#-- 获取会员等待评论商品标签 -->
+    <#assign memberWaitCommontListTag = newTag("memberWaitCommontListTag") />
+    <#assign memberWaitCommontList = memberWaitCommontListTag() />
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/member-items.css"/>
+    <div style="width:100%;height:45px;"></div>
+    <div class="wait-comment">
+        <div class="wait-comment-items">
+            <#if memberWaitCommontList.totalCount gt 0>
+                <#assign list = memberWaitCommontList.waitcommentsList />
+                <#list list as goods>
+                    <div class="item">
+                        <div class="img-wait-comment tap" data-href="${ctx}/goods-${goods.goods_id}.html">
+                            <@image src="${goods.thumbnail!''}" alt="${goods.name}" class="img-wait-comment-img" />
+                        </div>
+                        <div class="other-wait-comment">
+                            <div class="name-wait-comment tap" data-href="${ctx}/goods-${goods.goods_id}.html">
+                                <@substring title="${goods.name!''}" length=80 dot="..." />
+                            </div>
+                            <div class="peice-wait-comment">
+                                ￥${goods.price?string("0.00")}
+                            </div>
+                            <div class="botton-wait-comment tap" data-href="${ctx}/member/goods-comment.html?goods_id=${goods.goods_id}&product_id=${goods.product_id}&orderid=${goods.order_id}">
+                                去评价
+                            </div>
+                        </div>
+                    </div>
+                </#list>
+            <#else/>
+                <div class="eui-nodata">
+                    <img src="${ctx}/statics/e_tools/images/beifang/beifang-no_data.png">
+                </div>
+            </#if>
+        </div>
+    </div>
+    <script type="text/javascript">
+        new Module().navigator.init('待评论');
+    </script>
+</#if>
+</body>
+</html>

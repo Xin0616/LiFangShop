@@ -1,0 +1,370 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		<div class='buttonArea'>
+			<span id="searchbtn" style="float:left;display:block">	
+			<@permssion actid="goods,super_admin">		
+				<a href="javascript:void(0)"class="button" onclick="edit(-1,0)">添加</a>
+				<a href="javascript:void(0)" class="button"  onclick="del()">删除</a>
+				<a href="javascript:void(0)" class="button"  onclick="status()">审核</a>
+			</@permssion>
+			</span>
+			
+		</div>
+		
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="70" align="right">商品名称</td>
+					<td>
+						<input type="text"  id="searchName"  class="input_text" style="width: 95%;" >
+					</td>
+					<td width="70" align="right">商品编号</td>
+					<td>
+					<input type="text"   id="searchSn" class="input_text" style="width: 95%;" >
+					</td>
+					<td width="70" align="right">店铺名称</td>
+					<td>
+						<input type="text"   id="storeName"  class="input_text" style="width: 95%;" >
+					</td>
+					<td>
+						<a id="searchAdvance" class="button blueButton" onclick="searchApartments()" href="javascript:;">开始搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		
+			<table class="easyui-datagrid"  url="${ctx}/b2b2c/admin/group-buying/list-json.do?market_enable=${market_enable!''}" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true"  width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true,width:100" ></th>
+						<th data-options="field:'name',width:120,sortable:'true'" >团购商品</th>
+						<th data-options="field:'sn',width:70,sortable:'true'" >商品编号</th>
+						<th data-options="field:'store_name',width:70,sortable:'true'" >商品店铺</th>
+						<th data-options="field:'buying_number',width:45">起团数量</th>
+						<th data-options="field:'earnest',width:45" formatter="formatDate1">预付定金</th>
+						<th data-options="field:'buying_money',width:50" formatter="formatDate1">团购金额</th>
+						<th data-options="field:'fictitious_number',sortable:'true',width:55">虚拟已团数量</th>
+						<th data-options="field:'start_date',width:50" formatter="formatDate">团购开始时间</th>
+						<th data-options="field:'end_date',width:50" formatter="formatDate">团购结束时间</th>
+							<th data-options="field:'status',width:40" formatter="formatType">状态</th>
+						<th data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+				
+			</table>
+		</div>
+	</form>
+	<div id="editInfo"></div>
+</div>
+<script type="text/javascript">
+function formatDate1 (val,rowData,rowIndex){
+    if(val!=null){
+        return val.toFixed(2);
+}
+}
+function formatDate(value, row, index) {
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");	
+}
+function edit(id,status) {
+
+	if(id==-1){
+		
+	}else{
+
+	if (status == 1) {
+		parent.$.messager.alert("提示", "已审核，不能修改！", "error");
+		return
+	} 
+	}
+	$("#editInfo").show();
+　　	$('#editInfo').dialog({
+　　		title: "编辑",			
+　　		width: 1200,
+  		top:30,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/b2b2c/admin/group-buying/edit.do?type=0&id=' + id, 	
+　　		modal: true,
+　　		buttons: [{					
+			text:'确定',
+			iconCls:'icon-ok',
+			handler:function(){
+			var formflag = $("#dlyCenterEditForm").form('validate');
+				
+				if (formflag) {
+				var name = $("input[name='name']").val();
+				var buying_number = $("input[name='buying_number']").val();
+				var earnest = $("input[name='earnest']").val();
+				var buying_money = $("input[name='buying_money']").val();
+				var fictitious_number = $("input[name='fictitious_number']").val();
+				var store_name = $("input[name='store_name']").val();
+				var sn = $("input[name='sn']").val();
+				var end_date = $("input[name='end_date']").val();
+				var start_date = $("input[name='start_date']").val();
+				var startDate1 = new Date(start_date);
+			    var start = startDate1.getTime();
+			    var endDate1 = new Date(end_date);
+			    var end = endDate1.getTime();
+			    var date=new Date();
+			    var nowDate = date.getTime();
+			    if(nowDate-end>0){
+					parent.$.messager.alert("提示", "团购结束时间必须大于当前时间！", "error");
+					return	
+				}
+			    if(nowDate-start>0){
+					parent.$.messager.alert("提示", "团购开始时间必须大于当前时间！", "error");
+					return	
+				}
+			   
+				if(start-end>0){
+					parent.$.messager.alert("提示", "团购开始时间必须大于团购结束时间！", "error");
+					return	
+				}
+				if(earnest-buying_money>0){
+					parent.$.messager.alert("提示", "团购金额必须大于预付金额！", "error");
+					return	
+				}
+		
+					$.Loading.show("正在操作请稍候...");
+					$.ajax({
+						url : "${ctx}/b2b2c/admin/group-buying/save.do?ajax=yes",
+						type : "POST",
+						dataType : 'json',
+						data: {
+							id: id,
+							name:name,
+							buying_number:buying_number,
+							earnest:earnest,
+							buying_money:buying_money,
+							fictitious_number:fictitious_number,
+							store_name:store_name,
+							sn:sn,
+							end_date:end_date,
+							start_date:start_date,
+							type: 0
+						},
+						success : function(result) {
+	 						if (result.result == 1) {
+	 							$.Loading.success(result.message);
+	 							$("#editInfo").dialog('close');
+	 							searchApartments()
+	 						} else {
+	 							$.Loading.error(result.message);
+	 						}
+	 					},
+	 					error : function(e) {
+	 						$.Loading.error("出现错误 ，请重试");
+	 					}	
+			  		});
+ 			　　}
+			}
+		},{					
+			text:'取消',
+			iconCls:'icon-ok',
+			handler:function(){
+				$("#editInfo").dialog('close');
+			}
+		}]
+	});
+}	
+function formatOperation(value, row, index) {
+	
+	var val = "<a class='edit' title='修改' onclick='edit("+ row.id + ","+ row.status + ")' ></a>";
+	return val;
+}
+function del() {
+	var rows = $('#goodsdata').datagrid("getSelections");
+	if (rows.length < 1) {
+		$.Loading.error("请选择要删除的数据");
+		return;
+	}
+	if (!confirm("确认要删除选中的数据吗？")) {
+		return;
+	}
+	var options = {
+		url : "${ctx}/b2b2c/admin/group-buying/delete.do?ajax=yes",
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if (result.result == 1) {
+				$.Loading.success(result.message);
+				searchApartments();
+			}
+			if (result.result == 0) {
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	};
+	$('#gridform').ajaxSubmit(options);
+}
+function searchApartments() {
+	var name = $("#searchName").val();
+	var store_name = $("#storeName").val();
+	var sn = $("#searchSn").val();
+	$("#goodsdata").datagrid('load', {
+		name:name,
+		type : 1,
+		sn,sn,
+		store_name:store_name,
+		page : 1
+	});
+}
+function status() {
+
+	var rows = $('#goodsdata').datagrid("getSelections");
+	if (rows.length < 1) {
+		$.Loading.error("请选择要审核的数据");
+		return;
+	}
+	if (rows[0].status == "1") {
+		parent.$.messager.alert("提示", "已审核，不能重复审核！", "error");
+		return
+	} 
+	var id = $("#goodsdata").datagrid("getSelections")[0].id;
+
+	$("#editInfo").show();
+　　	$('#editInfo').dialog({
+　　		title: "审核",			
+　　		width: 1200,
+  		top:30,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/b2b2c/admin/group-buying/status.do?type=0&id=' + id, 	
+　　		modal: true,
+　　		buttons: [{					
+			text:'审核',
+			iconCls:'icon-ok',
+			handler:function(){
+				var name = $("input[name='name']").val();
+				var buying_number = $("input[name='buying_number']").val();
+				var earnest = $("input[name='earnest']").val();
+				var buying_money = $("input[name='buying_money']").val();
+				var fictitious_number = $("input[name='fictitious_number']").val();
+				var store_name = $("input[name='store_name']").val();
+				var sn = $("input[name='sn']").val();
+				var end_date = $("input[name='end_date']").val();
+				var start_date = $("input[name='start_date']").val();
+		
+				if(name != undefined && name != ""){
+					$.Loading.show("正在操作请稍候...");
+					$.ajax({
+						url : "${ctx}/b2b2c/admin/group-buying/saves.do?ajax=yes",
+						type : "POST",
+						dataType : 'json',
+						data: {
+							id: id,
+							name:name,
+							buying_number:buying_number,
+							earnest:earnest,
+							buying_money:buying_money,
+							fictitious_number:fictitious_number,
+							store_name:store_name,
+							sn:sn,
+							end_date:end_date,
+							start_date:start_date,
+							type: 0
+						},
+						success : function(result) {
+	 						if (result.result == 1) {
+	 							$.Loading.success(result.message);
+	 							$("#editInfo").dialog('close');
+	 							searchApartments()
+	 						} else {
+	 							$.Loading.error(result.message);
+	 						}
+	 					},
+	 					error : function(e) {
+	 						$.Loading.error("出现错误 ，请重试");
+	 					}	
+			  		});
+ 			　　	}else{
+					$.Loading.error("请输入名称");
+ 			　　	}
+			}
+		},{					
+			text:'驳回',
+			iconCls:'icon-ok',
+			handler:function(){
+				var name = $("input[name='name']").val();
+				var buying_number = $("input[name='buying_number']").val();
+				var earnest = $("input[name='earnest']").val();
+				var buying_money = $("input[name='buying_money']").val();
+				var fictitious_number = $("input[name='fictitious_number']").val();
+				var store_name = $("input[name='store_name']").val();
+				var sn = $("input[name='sn']").val();
+				var end_date = $("input[name='end_date']").val();
+				var start_date = $("input[name='start_date']").val();
+		
+				if(name != undefined && name != ""){
+					$.Loading.show("正在操作请稍候...");
+					$.ajax({
+						url : "${ctx}/b2b2c/admin/group-buying/nosaves.do?ajax=yes",
+						type : "POST",
+						dataType : 'json',
+						data: {
+							id: id,
+							name:name,
+							buying_number:buying_number,
+							earnest:earnest,
+							buying_money:buying_money,
+							fictitious_number:fictitious_number,
+							store_name:store_name,
+							sn:sn,
+							end_date:end_date,
+							start_date:start_date,
+							type: 0
+						},
+						success : function(result) {
+	 						if (result.result == 1) {
+	 							$.Loading.success(result.message);
+	 							$("#editInfo").dialog('close');
+	 							searchApartments()
+	 						} else {
+	 							$.Loading.error(result.message);
+	 						}
+	 					},
+	 					error : function(e) {
+	 						$.Loading.error("出现错误 ，请重试");
+	 					}	
+			  		});
+ 			　　	}else{
+					$.Loading.error("请输入名称");
+ 			　　	}
+			
+			}
+		}]
+	});
+}	
+function formatType(value, row, index){
+	var ret = "";
+	if(value != ""){
+		if(value == 0){
+			ret = "未审核";
+		}else if(value == 1){
+			ret = "已审核";
+		}else if(value == 2){
+			ret = "驳回";
+		}
+	}
+	return ret;
+}
+</script>
+

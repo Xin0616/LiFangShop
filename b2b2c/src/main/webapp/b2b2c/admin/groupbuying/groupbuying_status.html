@@ -1,0 +1,76 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text{width: 200px;}
+.left{width:410px;}
+.table-right{width:130px;float:none;}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form id="dlyCenterEditForm" method="post" class="validate">
+		
+			<table>
+			 <tr>
+					<th>商品编号：</th>
+					<td class="left"><input class="input_text" type="text" id="sn" readonly="true" name="sn" <#if apart?exists> value="${apart.sn!''}"</#if> 
+						></input>
+						<input type="hidden"  id="id3"  />
+				
+					</td>
+					<th>团购商品：</th>
+					<td class="left"><input class="input_text "  type="text" id="name" maxlength="20"
+						name="name" data-options="required:true" readonly="true" <#if apart?exists> value="${apart.name!''}"</#if> 
+						></input>
+					</td>
+					</tr>
+					<tr>
+					<th>商品店铺：</th>
+					<td class="left"><input class="input_text " data-options="required:true"  type="text" id="store_name" maxlength="20"
+						name="store_name"  data-options="required:true" readonly="true" <#if apart?exists> value="${apart.store_name!''}"</#if> 
+						></input>
+					<th>起团数量：</th>
+					<td class="table-right"><input class="input_text" type="text" id="buying_number" maxlength="20"
+						name="buying_number" data-options="required:true" readonly="true" <#if apart?exists> value="${apart.buying_number!''}"</#if>
+						></input>
+					</td>
+				</tr>
+				<tr>
+					<th>预付定金：</th>
+					<td class="left"><input class="input_text" type="text" id="url" maxlength="20"
+						name="earnest"  readonly="true" <#if apart?exists> value="${apart.earnest!''}"</#if>
+						></input>
+					</td>
+					<th>团购金额：</th>
+					<td class="table-right"><input class="input_text easyui-numberbox" type="text" 
+						name="buying_money"  readonly="true" <#if apart?exists> value="${apart.buying_money!''}"</#if> ></input>
+					</td>
+				</tr>
+
+				<tr>
+				
+					
+				
+					<th>团购开始时间：</th>
+					<td class="table-right"><input name="start_date" id="start_date"  class="input_text easyui-datetimebox" data-options="required:true" type="text" <#if apart?exists> value="<@dateformat time="${apart.start_date!''}" pattern="yyyy-MM-dd HH:mm:ss"/>" </#if> />
+					</td>
+					<th>团购结束时间：</th>
+					<td class="table-right"><input name="end_date" id="end_date" class="input_text easyui-datetimebox" data-options="required:true" type="text" <#if apart?exists> value="<@dateformat time="${apart.end_date!''}" pattern="yyyy-MM-dd HH:mm:ss"/>" </#if> />
+					</td>
+				</tr>
+				<tr>
+					<th>虚拟已团数量：</th>
+					<td class="table-right"><input readonly="true" class="input_text easyui-validatebox" type="text" <#if apart?exists> value="${apart.fictitious_number!''}"</#if>
+						name="fictitious_number" maxlength="15"  ></input>
+					</td> 
+				
+				
+				</tr>
+				
+			</table>
+			<input type="hidden" name="dly_center_id" value="">
+		</form>
+	</div>
+</div>
+<script>
+
+
+</script>

@@ -1,0 +1,56 @@
+/*我的咨询页面css*/
+#consult .mui-table-view-cell,#mine-msg .mui-table-view-cell{
+    padding: 15px 0 5px 0;
+    letter-spacing: 1px;
+    margin: 10px 0;
+    margin-top: 0;
+    border-top: 1px solid #e9e9e9;
+    box-shadow:  0 0 3px #e9e9e9;
+}
+#consult .consult-content1{
+    padding: 10px 20px;
+    background-color:#f8f7f7;
+}
+#consult .consult-content2{
+    padding: 10px 20px;
+    padding-bottom: 5px;
+    background-color:#fff;
+}
+#consult .right{
+    float:right;
+}
+#consult .red{
+    color: #E83E0D;
+}
+#consult .green{
+    color:#96E23F;
+}
+#consult .kefu{
+    padding: 5px 0;
+}
+/*我的消息页面css*/
+#mine-msg .msg-content {
+    padding:0 25px;padding-bottom: 10px
+}
+#mine-msg .mui-table-view-cell>a:not(.mui-btn){
+    margin-top: -15px;
+}
+#mine-msg .mui-navigate-right:after, .mui-push-right:after{
+    right: 20px;
+    color: #3a3a3a;
+}
+/*消息详情页面css*/
+.bg-color{background-color: #FFFFFF}
+#detail-msg{
+    padding:10px 20px 0 20px;
+    background-color: #FFFFFF;
+}
+#detail-msg p{
+    color: #333;
+}
+#detail-msg .msg-foot{
+    padding-top: 10px;
+    text-align: right
+}
+.page{padding:10px;text-align:center}
+.page ul{display:none}

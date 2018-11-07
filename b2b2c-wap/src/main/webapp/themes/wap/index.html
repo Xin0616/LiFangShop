@@ -1,0 +1,58 @@
+<#assign  title="商城首页" />
+<#include '/common/header.html'/>
+<link rel="stylesheet" href="${ctx}/statics/e_tools/mobile/library/swiper/swiper-3.3.1.min.css">
+<link rel="stylesheet" href="${ctx}${themes_path}/css/index.css">
+<script src="${ctx}/statics/e_tools/mobile/library/iscroll/iscroll-probe.js"></script>
+<script src="${ctx}/statics/e_tools/mobile/library/swiper/swiper-3.3.1.jquery.min.js"></script>
+<script src="${ctx}${themes_path}/js/page/index.js"></script>
+<#include '/index/search-nav.html'/>
+<div class="index" id="index">
+    <div class="inner-index" >
+        <!--首页横幅-->
+        <div class="item adv-box">
+            <#include '/index/adv.html'/>
+        </div>
+
+        <!--快速导�?->
+        <div class="item quick-nav">
+            <#include '/index/quick-nav.html'/>
+        </div>
+
+        <!--商城公告�?->
+        <div class="item bulletin-board">
+            <div class="inner-bulletin-board">
+                <div class="icon-bulletin-board">
+                    <div class="item">商城</div><div class="item icon">公告</div><i>&nbsp;�?/i>
+                </div>
+                <div class="content-bulletin-board">
+                    <#include '/index/bulletin-board.html'/>
+                </div>
+                <div class="more-bulletin-board"><i></i>更多</div>
+            </div>
+        </div>
+
+        <!--新品上市-->
+        <div class="item new-listing">
+            <#include '/index/new-listing.html'/>
+        </div>
+
+        <!--热销商品-->
+        <div class="item selling-goods">
+            <#include '/index/selling-goods.html'/>
+        </div>
+
+        <!--为您推荐-->
+        <div class="item special-recommend">
+            <#include '/index/special-recommend.html'/>
+        </div>
+
+        <div style="height: 50px; text-align: center; line-height: 50px; font-size: 12px; color: #333;">
+            已经到底了
+        </div>
+    </div>
+</div>
+
+<script>
+	
+</script>
+<#include '/common/footer.html'/>

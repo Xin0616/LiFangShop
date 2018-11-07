@@ -1,0 +1,235 @@
+<#include '/admin/header.html' > <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text {
+	width: 95%;
+}
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="orderform">
+	
+	<div style="display: block;" class="searchAdvanced" >
+		<span id="searchbtn" style="float:left;display:block">	
+				<a href="javascript:void(0)" class="button"  onclick="edit()">确认收款</a>
+			</span>
+			<span style="float: right;height:28px;">
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+						&nbsp&nbsp&nbsp&nbsp下单日期：
+			<input class="easyui-datebox" style="width: 260px;height: 28px;" id="start_time" />
+                        <span>&nbsp;~&nbsp;</span>
+                        <input class="easyui-datebox" style="width: 260px;height: 28px;" id="end_time" />
+                        
+					
+						<a id="searchAdvance" class="button blueButton" onclick="searchOrder()" href="javascript:;">开始搜索</a>
+					
+				</tr>
+			</table>
+			</span>
+		</div>
+		<div class="clear height10"></div>
+
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/case-store-order/list-json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" width="width" id="casedata" sortName="order_id"
+				sortOrder="desc">
+				<thead>
+					<tr>
+						<th data-options="field:'order_id',checkbox:true,width:90"></th>
+						<th data-options="field:'sn',width:180" >订单号</th>
+						<th data-options="field:'create_time',width:90,sortable:true"
+							formatter="formatDate">下单日期</th>
+						
+						<th data-options="field:'need_pay_money',width:100,sortable:true"
+							formatter="forMoney">付款额</th>
+							<th data-options="field:'balance_frozen',width:100,sortable:true"
+							formatter="forMoney">冻结账户金额</th>
+						<th data-options="field:'name',width:100">会员名称</th>
+						<th data-options="field:'nickname',width:100">会员昵称</th>
+						<th data-options="field:'courier',width:100">送货人</th>
+					
+
+
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function edit(){ 
+	var rows = $('#casedata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择确认收款商品");
+		return;
+	}
+	if(!confirm("确认要将这些订单收款？")){	
+		return ;
+	}
+	$.Loading.show("正在收款......");
+ 	var options = {
+			url : "${ctx}/b2b2c/admin/case-store-order/edit.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+		 			$('#casedata').datagrid("reload");      
+				}
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#orderform').ajaxSubmit(options);	
+}
+
+function formatType(value, row, index){
+
+	var ret;
+	
+		if(value == 0||value==null){
+			ret = "否";
+		}else if(value == 1){
+			ret = "是";
+		
+	}
+	return ret;
+}
+
+	function forMoney(value, row, index) {
+		var val = "￥" + value;
+		return val;
+	}
+	function formatExchangePoint(value,row,index){
+		if(value==null){
+			value=0
+		}
+		var val=value+"积分"
+		return val;
+	}
+	
+	//当商家包邮时，配送方式暂定为免邮(也就是订单配送方式为空时)
+	function forType(value, row, index) {
+		if(value == '' || value == null){
+			value = "免邮"; 
+		}
+		return value;
+	}
+	
+	function formatDate(value,row,index){
+		if(value==null||value==0){
+			return "";
+		}
+		else{
+			return getFormatDateByLong(value, "yyyy-MM-dd");
+		}
+		
+	}
+	
+	//订单状态
+	function forStruts(value, row, index) {
+		if(row.is_cancel==1){
+			return "申请取消订单";
+		}
+		var val;
+		val = getType(${status_Json},value);
+		return val;
+	}
+	
+	//付款状态
+	function forpay(value,row,index){
+		var val;
+		val = getType(${payStatus_Json},value);
+		return val;
+	}
+	
+	//发货状态
+	function forship(value,row,index){
+		var val;
+		val = getType(${ship_Json},value);
+		return val;
+	}
+	
+	
+	function getType(exMap,value){
+		var val;
+		$.each(exMap,function(key,values){ 
+		    if(value==values.key){
+		    	val=values.value;
+		    }
+		});
+		return val;
+	}
+	
+	
+	var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+	buttons.splice(1, 0, {
+	text: '清空',
+	handler: function(target){
+		 $('#start_time').datebox('setValue',"");
+	}
+	});
+	
+	var e_buttons = $.extend([], $.fn.datebox.defaults.buttons);
+	e_buttons.splice(1, 0, {
+	text: '清空',
+	handler: function(target){
+		 $('#end_time').datebox('setValue',"");
+	}
+	});
+	
+	$(function(){
+		
+	  	//还原搜索
+	    $("#resetInput").click(function(){
+			reset();
+		});
+	})
+	
+	function searchOrder(){
+		var start_time = $('#start_time').datebox('getValue');
+		var end_time = $('#end_time').datebox('getValue'); 
+		if(start_time != '' && end_time != ''){
+			if(end_time < start_time){
+				$.Loading.error("结束时间不能小于开始时间");
+				return ;
+			}
+		}
+
+		$("#casedata").datagrid('load', {
+			start_time:start_time,
+			end_time : end_time,
+		});
+}
+
+	function formatTime(value,row,index){
+		var val = getFormatDateByLong(value, "yyyy-MM-dd");
+		return val;
+	}
+	
+	//初始化高级搜索条件 add_by DMRain 2016-8-31
+	function reset(){
+		$("#sn").val("");
+		$("#start_time").combo('setText','');
+		$("#end_time").combo('setText','');
+		$("#status").val("");
+		$("#ship_name").val("");
+		$("#paystatus").val("");
+		$("#shipstatus").val("");
+		$("#shipping_type").val("");
+		$("#payment_id").val("");
+		$("#store_name").val("");
+	}
+	
+</script>
+
+<#include '/admin/footer.html' >
+
+

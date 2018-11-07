@@ -1,0 +1,86 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		<div class='buttonArea'>
+			<span id="searchbtn" style="float:left;display:block">	
+			<@permssion actid="goods,super_admin">		
+				<a href="javascript:void(0)"class="button" onclick="edit(-1,0)">添加</a>
+				<a href="javascript:void(0)" class="button"  onclick="del()">删除</a>
+				<a href="javascript:void(0)" class="button"  onclick="status()">审核</a>
+			</@permssion>
+			</span>
+			
+		</div>
+		
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+						&nbsp&nbsp&nbsp&nbsp日期：
+			<input class="easyui-datebox" style="width: 260px;height: 28px;" id="start_time" />
+                        <span>&nbsp;~&nbsp;</span>
+                        <input class="easyui-datebox" style="width: 260px;height: 28px;" id="end_time" />
+						<a id="searchAdvance" class="button blueButton" onclick="searchApartments()" href="javascript:;">开始搜索</a>
+					
+				</tr>
+			</table>
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		
+			<table class="easyui-datagrid"  url="${ctx}/b2b2c/admin/memberStatistics/memberStatistics_list-json.do?market_enable=${market_enable!''}" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true"  width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc">
+				<thead>
+					<tr>
+						
+						<th data-options="field:'member_id',width:120,sortable:'true'" >ID</th>
+						<th data-options="field:'nickname',width:70,sortable:'true'" >昵称</th>
+						<th data-options="field:'balance',width:45">钱包余额</th>
+						<th data-options="field:'geshu',width:45" >订单数</th>
+						<th data-options="field:'zonger',width:50" >消费金额</th>
+						<th data-options="field:'time',sortable:'true',width:55">距离上一单(天)</th>
+						
+					</tr>
+				</thead>
+				
+			</table>
+		</div>
+	</form>
+	<div id="editInfo"></div>
+</div>
+<script type="text/javascript">
+
+
+
+
+
+function searchApartments() {
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue'); 
+	if(start_time != '' && end_time != ''){
+		if(end_time < start_time){
+			$.Loading.error("结束时间不能小于开始时间");
+			return ;
+		}
+	}
+
+	$("#goodsdata").datagrid('load', {
+		start_time:start_time,
+		end_time : end_time,
+	
+	});
+}
+
+
+</script>
+

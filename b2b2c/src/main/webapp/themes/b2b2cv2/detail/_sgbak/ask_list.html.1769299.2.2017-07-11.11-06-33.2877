@@ -1,0 +1,22 @@
+<div id="ask_list_wrapper">
+	<div class="ask_all">
+		<#include 'ask_all.html'/>
+	</div>
+	<div class="clear"></div>
+</div>
+<script>
+$(function(){
+	
+	loadAsk_wrapper_list(1);
+	
+	function loadAsk_wrapper_list(page){
+		$("#ask_list_wrapper .ask_all").load("${ctx}/detail/ask_all.html?goodsid="+${goodsid}+"&page="+page,function(){
+			$("#ask_list_wrapper .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				loadAsk_wrapper_list(pageno);
+			});
+		});	
+	}
+	
+});
+</script>

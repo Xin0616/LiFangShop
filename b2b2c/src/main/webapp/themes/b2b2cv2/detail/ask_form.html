@@ -1,0 +1,41 @@
+<#include 'ask_list.html'/>
+<div id="ask_form_wrapper">
+	<form method="post" id="askForm"  >
+		<input type="hidden" name="goods_id" value="${goodsid}" />
+		<input type="hidden" name="commenttype" value="2" />
+		<h2>鍙戣〃鍜ㄨ</h2>
+		<label>
+			<h3>鍜ㄨ鍐呭锛�/h3>
+			<textarea  name="content" id="ask_content" maxlength="180" placeholder="璇峰湪姝ゅ杈撳叆鎮ㄧ殑闂"></textarea>
+		</label>
+ 		<div class="ask_btn" style="float:none;display:block;text-align:left;margin:10px 0px">
+			<a href="javascript:;" class="blue_btn" id="askBtn">鎻愪氦鍜ㄨ</a>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+$(function(){	
+	/* $("#ask_content").focus(function(){
+		if(this.value=="璇峰湪姝ゅ杈撳叆鎮ㄧ殑闂"){
+			this.value="";	
+		}
+	}).blur(function(){
+		if( $.trim(this.value)==""){
+			this.value="璇峰湪姝ゅ杈撳叆鎮ㄧ殑闂";
+		}
+	}); */
+	$("#askBtn").click(function(){
+		var cval = $('#ask_content').val();
+		if(cval == '' ){
+			$.message.error("咨询问题不能为空，请填写完整问题！");
+			return;
+		}
+		else if(cval.length > 180){
+			$.message.error("咨询问题过长，请简短咨询");
+			return;
+		}
+		CommentForm.formSubmit($(this),$("#askForm"));
+	});
+});
+</script>

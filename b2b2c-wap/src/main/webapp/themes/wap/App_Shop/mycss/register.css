@@ -1,0 +1,99 @@
+#reg-content,#info-content{
+    margin-top: 50px;
+}
+#reg-content .content,#save-content .content,#info-content .content{
+    margin: 10px 0;
+    background-color: #FFFFFF;
+    color: #333333;
+}
+#reg-content .collect-code,#save-content .collect-code{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 100px;
+    height: 30px;
+    color: #FFFFFF;
+    background-color: #E73602;
+    border-radius: 5px;
+    line-height: 30px;
+    text-align: center;
+}
+#reg-content .mui-input-group,#save-content .mui-input-group,#info-content .mui-input-group,#save-content .mui-input-group{
+    background-color: #f8f7f7;
+}
+#reg-content .content label,#save-content .content label,#info-content .content label{
+    letter-spacing: 2px;
+    width: 25%;
+    padding: 12px 8px;
+    padding-top: 13px;
+}
+#reg-content .mui-input-row label~input,#save-content .mui-input-row label~input{
+    width: 75%;
+}
+#reg-content .mui-input-group .mui-input-row:after,#save-content .mui-input-group .mui-input-row:after{
+    left: 0;
+}
+#reg-content .mui-btn-block,#save-content .mui-btn-block,#info-content .mui-btn-block{
+    width: 40%;
+    margin: 0 auto;
+    padding: 5px 0;
+}
+#reg-content .mui-btn-primary,#save-content .mui-btn-primary,#info-content .mui-btn-primary{
+    background-color: #E73602;
+    border: 0 solid transparent;
+    border-radius: 5px;
+    font-size: 16px;
+}
+#reg-content .mui-radio{
+    vertical-align: middle;
+}
+#reg-content .radio-content{
+    display: inline-block;
+    width: 30%;
+    line-height: 40px;
+}
+#reg-content #get_code[disabled],#save-content #get_code[disabled]{
+    background-color: #B6B6B6;
+}
+#reg-content .change-btn,#save-content .change-btn,#info-content .change-btn{
+    width: 75%;
+    height: 40px;
+    border: 0px solid transparent;
+    font-size: 14px;
+    color: #333;
+}
+#reg-content .ui-alert,#save-content .ui-alert,#info-content .ui-alert{
+    float: left;
+}
+.error{color:#e73602}
+/*选择所在小区模态框按钮样式*/
+/*.mui-btn-blue, .mui-btn-primary, input[type=submit]{*/
+    /*border: 0 solid transparent;*/
+    /*background-color: #E73602;*/
+/*}*/
+/*save-pwd补充样式*/
+#save-content{
+    margin-top: 45px;
+}
+#save-content .mui-content-padded{
+    margin-top: 40px;
+}
+/*个人信息样式补充*/
+.right{
+    margin-right: 10px;
+    float: right;
+    width: 40%;
+    text-align: right;
+    height:40px;
+    line-height: 40px;
+    color: #000000;
+}
+#info-content input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #333;
+}
+#info-content input:-moz-placeholder, textarea:-moz-placeholder {
+    color:#333;
+}
+#info-content input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color:#333;
+}

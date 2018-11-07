@@ -1,0 +1,402 @@
+<#assign  title="团购商品详情" />
+<#include '/common/header.html'/>
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/goods.css">
+<script type="text/javascript" src="${ctx}${themes_path}/js/touchslider.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/goods.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/spec.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<style>
+	#top #navigator{
+		background-color:#e73602;
+		position: fixed;
+    	top: 0px;
+    	z-index:99
+	}
+</style>
+<#-- 获取商品详情 -->
+<#assign groupbuyingDetailTag=newTag("groupbuyingDetailTag")>
+<#-- 调用标签获取商品基本信息 -->
+<#assign goods = groupbuyingDetailTag("'id':${id!0}") />
+<#assign goods_id = goods.id />
+<#assign store_id = goods.store_id/>
+<#-- 创建商品相册标签 -->
+<#assign goodsGalleryTag= newTag("goodsGalleryTag") />
+<#-- 调用标签获取商品相册信息 -->
+<#assign galleryList= goodsGalleryTag("'id':${id!0}")!'' />
+<#-- 创建商品属性标签 -->
+<#assign goodsAttributeListTag= newTag("goodsAttributeListTag") />
+<#-- 调用标签获取商品属性信息 -->
+<#assign attrList= goodsAttributeListTag("'goodsid':${goods.goods_id!''}")!'' />
+
+<#-- 创建商品参数标签 -->
+<#assign goodsParametersTag= newTag("goodsParametersTag") />
+<#-- 调用标签获取商品参数信息 -->
+<#assign goodsPara= goodsParametersTag("'goodsid':${goods.goods_id!''}")!'' />
+
+<#-- 获得商品参数的参数组 -->
+<#if goodsPara.hasParam==true>
+	<#assign para = goodsPara.paramList />
+</#if>
+
+
+<#-- 检测组件是否启用 -->
+<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+<#assign groupbuyIsOn =checkCmptIsOnTag("{'componentName':'多商户团购组件'}") />
+<#if groupbuyIsOn=="ON">
+<#-- 团购标签 -->
+<#if goods.is_groupbuy==1>
+	<#assign groupBuyTag=newTag("groupBuyTag") />
+	<#assign groupBuy=groupBuyTag("{'goodsid':${goods.goods_id} }") />
+</#if>
+<div style="width:100%;height:45px;"></div>
+<input type="hidden" class="groupbuy" rel="${goods.is_groupbuy}">
+</#if>
+<!-- 商品相册 -->
+	<div class="photo" id="slider" style="margin-top:45px">
+		<ul class="goods_images">
+			<#list galleryList as gallery>
+				<li <#if !gallery_has_next>class="last"</#if> <#if gallery.isdefault==1>class="selected"</#if>> <@image src="${gallery.big}"  big="${gallery.big}" small="${gallery.small}"/></li>
+			</#list>
+		</ul>
+		<div id="goods_circle"></div>
+	</div>
+<!-- 商品简介 -->
+<div class="goods_intro">
+	<div class="goodprice">
+		<div class="goodstitle"><h1>${goods.name}</h1></div>
+		<p>团购价格：<span style="color:#ca4d5f;margin:0;float:none">￥${goods.buying_money}</span></p>
+		<del id="original_cost">原价：￥${goods.mktprice!''}</del>     
+		<p><span>商品货号：${goods.sn}</span></p>
+		<p><span>已团购：${goods.buying_number}</span></p>
+	</div>
+    <div class="store_bonus_box">
+        <#include '/store/store-bonus.html' />
+    </div>
+
+<#assign checkStoreCurrActTag = newTag("checkStoreCurrActTag") />
+<#assign currentAct = checkStoreCurrActTag("{'store_id':${store_id}}")!'' />
+<!-- 商品规格 -->
+<div class="goods_spec" id="goods_spec">
+<!-- 创建商品规格标签 -->
+<#assign goodsSpecTag = newTag("goodsSpecTag") />
+<!-- 调用商品规格标签 -->
+<#assign goodsSpec = goodsSpecTag()!'' />
+<input type="hidden" name="productid" id="productid"  />
+<input type="hidden" value="1" name="havespec" />
+<#if  goodsSpec.have_spec??&& goodsSpec.have_spec ==1 >
+<!-- 规格列表 -->
+<dl class="spec_tip"></dl>
+	<#list goodsSpec.specList as spec>	
+		<dl class="spec_item">
+			<dt><span><em>${spec.spec_name}</em>：</span></dt>
+			<dd>
+				<ul>
+					<#list spec.valueList as val  >
+						<li class="sp_txt">
+							<a name="goods_spec" specid="${spec.spec_id}" specvid="${val.spec_value_id}"  href="javascript:;"  title="${val.spec_value}" >
+								<span><nobr>${val.spec_value}</nobr></span><i>&nbsp;</i>
+							</a>
+						</li>
+					</#list>
+				</ul>
+			</dd>
+		</dl>		
+	</#list>
+</#if>
+	</div>
+	
+	
+	
+<!-- 购买数量 -->
+	<div class="goods_num">
+		<p>数量：</p>
+		<label><span class="goods_cut">-</span><input type="text" value="1" class="goodsnum"/><span class="goods_add" rel="${goods.store!0}">+</span></label>
+		<p class="goods_s">库存：${goods.enable_store!'0'}</p>
+	</div>
+</div>
+
+<!-- 商品详细说明 -->
+<div class="goods">
+	<ul class="goods_title">
+		<li class="t_property ">商品属性</li>
+		<li class="t_photo selected">图文详情</li>
+		<li class="t_commont">咨询</li>
+	</ul>
+	<div class="property" style="display:none">
+	<#if goodsPara.hasParam==true>
+		<h1>基本信息</h1>
+		<ul>
+			<#list para as parameters>
+				<!-- 获得 paramList下的json数组，使用第二层list循环-->
+				<#list parameters.paramList as gparam>
+					<li>
+						<p style="font-size:0.9em;">${gparam.name!'' }:</p>
+						<span style="font-size:0.9em;">${gparam.value!'' }</span>
+					</tr>
+				</#list>
+			</#list>
+		</ul>	
+	</#if>
+		
+		<h1>商品属性</h1>
+		<ul>
+			<#list attrList as goodsattr>
+				<li>
+					<p style="font-size:0.9em;">${goodsattr.attrName!''}：</p>
+					<span style="font-size:0.9em;">${goodsattr.attrValue!''}</span>
+				</li>
+			</#list>
+		</ul>
+		
+	</div>
+	<div class="g_photo">
+		${goods.intro!''}
+	</div>
+	<div class="commont" style="display:none">
+		<div class="goods_discuss_lsit">
+		
+		</div>
+	</div>
+</div>
+
+<!-- 购买功能板块 -->
+<div class="goods_tools" rel="${goods.id}" id="${goods.store_id}">
+	<a href="javascript:;" class="my_collect"><#if member?? ><script type="text/javascript">var isLogin= "1";</script><#else><script type="text/javascript">var isLogin= "0";</script></#if></a>
+	<a href="${ctx}/cart.html" class="my_cart"><span>0</span></a>
+	 <#if goods.store==0>
+	 	<div class="no_goodsincart">抱歉，卖完了</div>
+	 <#else>	
+	 	<input type="button" value="加入购物车" class="in_cart" id="groupbuy_cart"/>
+	</#if>
+	<div class="cart_way">
+	<#if  goodsSpec.have_spec??&& goodsSpec.have_spec ==1 >
+		<input type="hidden" value="1" name="havespec" />
+	</#if>
+	</div>
+</div>
+<div id="mypopup">
+		
+		<div class="prompt">
+		    <p id="wxts">温馨提示</p>
+		    <p id="hintinfo"></p>
+		    <a id="closepopup">确定</a>
+		</div>
+</div>
+<script>
+$(function(){
+    var module = new Module();
+    module.navigator.init('商品详情');
+  	 
+    //加载评论
+    loadDiscuss_wrapper_list(1);
+
+    //  显示促销信息
+    $('.icon-content-activity').on('click', function () {
+        var $this = $(this),
+            _show = $this.is('.show');
+        _show ? $this.removeClass('show') : $this.addClass('show');
+        _show ? $('.content-activity').css({height: $('.item-activity').length * 30}) : $('.content-activity').css({height: 30});
+    })
+
+    if($('.item-activity').length == 1){$('.icon-content-activity').css('display', 'none')}
+
+
+    //改变图片大小
+	$(".g_photo p img").css({"width":"100%","height":"auto","max-width":"640px"})
+	//商品规格
+	Spec.init(${goods.goods_id});
+	//跳转到我的收藏
+	$(".my_collect").click(function(){
+		if(isLogin == 0){
+			module.message.error('您还没有登录哦！')
+		}
+		else{
+			location.href = ctx + '/member/my-collect.html?type=goods';
+		}
+	})
+	//加载购物车数量
+	goodsjs.cart_num();
+	//标签切换
+	$(".goods_title li").click(function(){
+		$(".goods_title li").removeClass("selected");
+		$(this).addClass("selected");
+	})
+	$(".t_property").click(function(){
+		$(".property").show();
+		$(".g_photo").hide();
+		$(".commont").hide();
+	})
+	$(".t_photo").click(function(){
+		$(".property").hide();
+		$(".g_photo").show();
+		$(".commont").hide();
+	})
+	$(".t_commont").click(function(){
+		$(".property").hide();
+		$(".g_photo").hide();
+		$(".commont").show();
+	})
+	//判断库存
+	goodsjs.goods_stock();
+	//立即购买
+	goodsjs.buy();
+	//加入收藏
+	goodsjs.goodscollect();
+	//图片滚动
+	goodsjs.goodsimg();
+	//加入购物车
+	$("#groupbuy_cart").click(function() {
+		var showCartData = 0;
+		var gnum = $(".goodsnum").val();
+		var gid = $(".goods_tools").attr("rel");
+		var storeid = $(".goods_tools").attr("id");
+		var productid = $("#productid").val();
+		var spec = $(".cart_way [name='havespec']").val();
+		if(gnum<1){
+			$("#hintinfo").text('抱歉，库存不足！');
+			popup.show();
+			$("#closepopup").on("tap",function(){
+				popup.hide();
+			});	
+			return false;
+		}
+		show.show_cover();       //增加遮罩。来阻止在提交ajax时进行其他操作。
+		if(spec==1){
+			var specLi = parseInt($(".spec_item ul").length);
+			var specLiSelected = parseInt($(".sp_txt .hovered").length);
+			if(specLi != specLiSelected){
+				$("#hintinfo").text("请选择规格");
+				popup.show();
+				$("#closepopup").on("tap",function(){
+					popup.hide();
+				});	
+				show.close_cover();       //增加遮罩。来阻止在提交ajax时进行其他操作。
+				return false;
+			}
+
+			$.ajax({
+				url: ctx + "/api/shop/cart/add-group-product.do?goodsid="+gid+"&store_id="+storeid+"&num="+gnum+"&productid="+productid+"&havespec=1&showCartData=0",
+				dataType:"json",
+				success : function(data) {
+					if(data.result==1){
+						show.close_cover();          //关闭遮罩
+						$("#hintinfo").text('加入购物车成功！');
+						popup.show();
+						$("#closepopup").on("tap",function(){
+							popup.hide();
+						});	
+						$.ajax({
+							url: ctx + "/api/shop/cart/get-cart-data.do",
+							dataType:"json",
+							success:function(result){
+								if(result.result==1){
+									var goodscartnum = result.data.count;
+									$(".my_cart span").empty();
+									$(".my_cart span").text(goodscartnum);
+								}else{
+									show.close_cover();          //关闭遮罩
+									$("#hintinfo").text(result.message);
+									popup.show();
+									$("#closepopup").on("tap",function(){
+										popup.hide();
+									});	
+								}
+							},
+							error:function(){
+								show.close_cover();          //关闭遮罩
+								$("#hintinfo").text('抱歉，收藏出现意外错误');
+								popup.show();
+								$("#closepopup").on("tap",function(){
+									popup.hide();
+								});	
+							}
+						});
+					}
+					else{
+						show.close_cover();          //关闭遮罩
+						$("#hintinfo").text(data.message);
+						popup.show();
+						$("#closepopup").on("tap",function(){
+							popup.hide();
+						});	
+					}
+				}
+			})
+		}else{
+			$.ajax({
+				url: ctx + "/api/shop/cart/add-group-product.do?productId="+productid+"&num="+gnum+"&showCartData="+showCartData+"&group_id="+gid,
+				dataType:"json",
+				success : function(data) {
+					if(data.result==1){
+						show.close_cover();          //关闭遮罩
+						$("#hintinfo").html('加入购物车成功！');
+						popup.show();
+						$("#closepopup").on("tap",function(){
+							popup.hide();
+						});	
+						$.ajax({
+							url: ctx + "/api/shop/cart/get-cart-data.do",
+							dataType:"json",
+							success:function(result){
+								if(result.result==1){
+									var goodscartnum = result.data.count;
+									$(".my_cart span").empty();
+									$(".my_cart span").text(goodscartnum);
+								}else{
+									show.close_cover();          //关闭遮罩
+									$("#hintinfo").text(result.message);
+									popup.show();
+									$("#closepopup").on("tap",function(){
+										popup.hide();
+									});	
+								}
+							},
+							error:function(){
+								show.close_cover();          //关闭遮罩
+								$("#hintinfo").text('抱歉，收藏出现意外错误');
+								popup.show();
+								$("#closepopup").on("tap",function(){
+									popup.hide();
+								});	
+							}
+						});
+					}
+					else{
+						show.close_cover();          //关闭遮罩
+						$("#hintinfo").text(data.message);
+						popup.show();
+						$("#closepopup").on("tap",function(){
+							popup.hide();
+						});	
+					}
+				},
+				error:function(){
+					$("#hintinfo").text('抱歉，提交失败！');
+					popup.show();
+					$("#closepopup").on("tap",function(){
+						popup.hide();
+					});	
+				}
+			})
+		}
+	})
+	
+})
+//商品评论
+function loadDiscuss_wrapper_list(page){
+    $(".goods_discuss_lsit").load("discuss_list.html?goods_id="+${goods.goods_id}+"&page="+page,function(){
+        $(".goods_discuss_lsit .page li a").click(function(){
+            var pageno= $(this).attr("page");
+            loadDiscuss_wrapper_list(pageno);
+        });
+    });
+}
+</script>
+<div class="reserve" style="width:100%;height:70px;">
+</div>
+		<!-- 遮罩弹出曾 -->	
+<#include '/common/show.html' />
+</body>
+</html>

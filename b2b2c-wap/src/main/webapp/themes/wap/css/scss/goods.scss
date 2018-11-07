@@ -1,0 +1,63 @@
+@import "icons-base64";
+@import "color-config";
+
+/* 促销展示
+ ============================================================================ */
+
+/* 促销展示 */
+
+.goods-detail-box.activity {
+    display: flex;
+    position: relative;
+    font-size: 14px;
+}
+.title-activity {
+    margin-top: 5px;
+    width: 30px;
+    overflow: hidden;
+    color: #333;
+}
+
+.content-activity {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 28px;
+    overflow: hidden;
+    -webkit-transition: all 200ms ease-out;
+    transition: all 200ms ease-out;
+}
+
+.content-activity .item-activity {
+    margin: 5px 0;
+}
+
+.icon-activity {
+    border: 1px solid $themes_color;
+    padding: 2px;
+    text-align: center;
+    line-height: 15px;
+    font-size: 12px;
+    color: $themes_color;
+}
+
+.detail-activity {
+    color: #333;
+    margin-left: 10px;
+}
+
+.icon-content-activity {
+    display: block;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 15px;
+    @include icon_fold_2c2c2c;
+    background-size: 70%;
+}
+
+.icon-content-activity.show {
+    @include icon_unfold_2c2c2c;
+    background-size: 70%;
+}
+

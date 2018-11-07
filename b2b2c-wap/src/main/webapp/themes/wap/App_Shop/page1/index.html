@@ -1,0 +1,631 @@
+<#assign  title="商城首页" />
+<#include '/common/header.html'/> 
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign member = memberLoginCheckTag() />
+<#assign groupbuyingPageTag = newTag("groupbuyingPageTag") />
+<#assign groupbuying = groupbuyingPageTag() />
+<#assign webpage = groupbuyingPageTag('{"pageSize":5,"pageNo":${page!1}}') />
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>首页</title>
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css">
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/iconfont.css"/>
+        <link rel="stylesheet" href="${ctx}/statics/e_tools/mobile/library/swiper/swiper-3.3.1.min.css">
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/index.css">
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/b2b2cwap.css">
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/mine.css"/>
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+        <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/index.css"/>
+	<style>
+		/*团购*/
+		#tuangou .order-tg{
+			width: 100%;
+			padding: 0
+		}
+		#tuangou .date-tg{
+			width: 100%;
+			text-align: center;
+			background: #EFEFF4;
+			letter-spacing: 2px;
+			padding: 10px 0
+		}
+		#tuangou .order_toolds{
+			background:#fff;
+			padding-top:10px;
+		}
+		#tuangou .sw-tg{
+			width: 50%;
+			text-align: center;
+			letter-spacing: 1px
+		}
+		#tuangou .green_btn{
+			margin:0 5px;
+			width: 90%;
+			background:#D0CFCD;
+			color: #A6A5A3
+		}
+		#tuangou .red_btn{
+			margin:0 5px;
+			width: 90%;
+			background:#E73602;
+			color: #fff
+		}
+		#tuangou .o_right h4,#tuangou .o_right p,#tuangou .o_right p span{
+			font-size:16px;
+			line-height:20px
+		}
+
+			.mui-bar-tab .mui-tab-item .mui-icon{
+			left:0}
+			/* 加入购物车样式	 */	
+		#picture .goods_cut,#picture .goods_add,#picture .goodsnum{
+			    color: #131927;
+			    display: inline-block;
+			    width: 25px;
+			    height: 25px;
+			    border: 1px solid #98999e;
+			    background: #e2e2e2;
+			    line-height: 25px;
+			    text-align: center;
+			    font-size: 14px;
+			    font-weight: bold;
+			    vertical-align: inherit;
+		}
+		#picture .goodsnum{
+			width:55px;
+			height:30px;
+		}
+		#picture .cart-change{
+			width:100%;
+			position:fixed;
+			bottom:0;
+			background:#000;
+			opacity:0。9;
+			text-align:center;
+			padding:10px;
+		}
+		#picture .cart-change>p,#picture .goods_num>p{color:#fff}
+		#picture .goods_num{
+			width: 100%;
+		}
+		#picture .goods_num p{
+			float: left;
+		    display: inline;
+		    height: 42px;
+		    line-height: 42px;
+		    color: #fff;
+		}
+		#picture .goods_num label{
+			float: left;
+		    display: inline;
+		    margin: 0 5%;
+		    margin-top:10px;
+		    height: 40px;
+		    line-height: 40px;
+		}
+		#picture .goods_num label input{
+			text-align: center;
+		    width: 50px;
+		    height: 25px;
+		    line-height: 25px;
+		    float: left;
+		    display: inline;
+		    border: 1px solid #98999e;
+		    border-left: 0px none;
+		    border-right: 0px none;
+		    background: #fff;
+		    font-size: 14px;
+		}
+		#picture .goods_num label span{
+			float: left;
+		    color: #131927;
+		    display: block;
+		    width: 25px;
+		    height: 25px;
+		    border: 1px solid #98999e;
+		    background: #e2e2e2;
+		    line-height: 25px;
+		    text-align: center;
+		    font-size: 14px;
+		    font-weight: bold;
+		}
+		#picture .add_cart{
+			width: 27%;
+		    height: 40px;
+		    line-height: 20px;
+		    overflow: hidden;
+		    text-align: center;
+		    border-radius: 10px;
+		    font-size: 0.95em;
+		    font-weight: normal;
+		    color: #fff;
+		    margin-right: 2%;
+		    display: inline;
+		    border: 0px none;
+		    background: #eb5428;
+		}
+		#cart_num{
+			width: 15px;
+			height: 15px;
+			line-height: 15px;
+			text-align: center;
+			border-radius: 10px;
+			color: #fff;
+			background: #ff0000;
+			position: absolute;
+			top: 2px;
+			right: 12px;
+			z-index:99;
+		}
+	</style>
+	<body>
+		<nav class="mui-bar mui-bar-tab mui-active">
+			<a class="mui-tab-item" href="#home">
+				<span class="mui-icon iconfont icon-shouye-shouye"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="#tuangou">
+				<span class="mui-icon iconfont icon-tuangouicon"></span>
+				<span class="mui-tab-label">团购</span>
+			</a>
+			<a class="mui-tab-item" href="#fenlei">
+				<span class="mui-icon iconfont icon-fenlei"></span>
+				<span class="mui-tab-label">商品分类</span>
+			</a>
+			<a class="mui-tab-item" id="cart" href="#" style="position:relative">
+				<span class="mui-icon iconfont icon-gouwuche"></span>
+				<span id="cart_num">0</span>
+				<span class="mui-tab-label">购物车</span>
+			</a>
+			<a class="mui-tab-item" href="#mine">
+				<span class="mui-icon iconfont icon-wode-copy"></span>
+				<span class="mui-tab-label">我的</span>
+			</a>
+		</nav>
+		<div class="mui-content" style="background:none">
+			<div id="home" class="mui-control-content mui-active">
+				<header class="mui-bar mui-bar-nav">
+					<#include '/App_Shop/index-home/search-nav.html'/>
+				</header>
+				<div class="mui-content">
+                    <div class="item quick-nav">
+                        <#include '/App_Shop/index-home/quick-nav.html'/>
+                    </div>
+                    <!--新品上市-->
+                    <div class="item new-listing">
+                        <#include '/App_Shop/index-home/new-listing.html'/>
+                    </div>
+
+                    <!--热销商品-->
+                    <div class="item selling-goods">
+                        <#include '/App_Shop/index-home/selling-goods.html'/>
+                    </div>
+
+                    <!--为您推荐-->
+                    <div class="item special-recommend">
+                        <#include '/index/special-recommend.html'/>
+                    </div>
+                    <div style="height: 50px; text-align: center; line-height: 50px; font-size: 12px; color: #333;">
+                        	已经到底啦...
+                    </div>
+                </div>
+			</div>
+			<div id="tuangou" class="mui-control-content">
+				<header class="mui-bar mui-bar-nav">
+					<h1 class="mui-title">团购</h1>
+				</header>
+				<div class="mui-content">
+					<div id="slider" class="mui-slider" >
+						<div class="mui-slider-group mui-slider-loop">
+							<!-- 第一张 -->
+							<div class="mui-slider-item">
+								<a href="#">
+									<img src="${ctx}${themes_path}/App_Shop/myimages/solider.png">
+								</a> 
+							</div>
+						</div>
+					</div>
+					<div class="order_detail">
+						<div class="order_goodslist">
+							<ul>
+							<#list groupbuying.result as groupList>
+								<li class="order-tg" style="margin-top:10px;padding:5px"> 
+									<div class="order_outside" style="padding: 10px 5%">
+										<div class="o_left">
+											<a href="">
+												<@image src="${groupList.small!''}"/>
+											
+											</a>
+		   								</div>
+										<div class="o_right">
+											<h4>${groupList.name}</h4>
+											<p>已订购<span>${groupList.buying_number}</span>盒</p>
+											<p style="color: #e73602;font-weight: bold">￥<span>${groupList.buying_money!''}</span></p>
+											<p style="margin:10px 0 0 0"></p>
+										</div>
+									</div>
+									<div class="order_toolds">
+										<input type="hidden" class="buying_date" value="<@dateformat time="${groupList.end_date!''}" pattern="yyyy-MM-dd HH:mm:ss"/>" />
+										<a class="buying"></a>
+										<a href="${ctx}/groupbuy_goods-${groupList.id}.html" class="red_btn">查看详情</a>
+									</div>
+								</li>
+							</#list>
+							</ul>
+						</div>
+					</div> 
+				</div>
+				<div class="list_page" style="margin-top:20px;">
+					<@pager pageno="${webpage.currentPageNo}" pagesize="${webpage.pageSize}" totalcount="${webpage.totalCount}" />
+				</div>
+			</div>
+			<div id="fenlei" class="mui-control-content">
+				<header class="mui-bar mui-bar-nav">
+					<h1 class="mui-title">商品分类</h1>
+				</header>
+				<div class="mui-content">
+					<#-- 调用商品分类信息 -->
+					<#assign goodsCatTag= newTag("goodsCatTag")>
+					<#assign goodsCat = goodsCatTag("'catimage':'on'}") >
+					<div class="cat-wrapper" id="cat-wrapper">
+                        <ul class="mui-table-view mui-grid-view">
+                            <#list goodsCat.cat_tree as cat>
+                                <li class="shop_list mui-table-view-cell mui-media mui-col-sm-3 mui-col-xs-4 <#if cat_index==0> focus</#if>" value="${cat.cat_id}">
+                                    <a href="javascript:;">
+                                        <img class="mui-media-object" src="${cat.image!'${ctx}${themes_path}/App_Shop/myimages/mine/shuijiao.png'}">
+                                        <div class="mui-media-body">${cat.name}</div>
+                                    </a>
+                                </li>
+                            </#list>
+                        </ul>
+				    </div>
+				</div>
+			</div>
+			<!--<div id="car" class="mui-control-content">-->
+				<!--<header class="mui-bar mui-bar-nav">-->
+					<!--<h1 class="mui-title">购物车</h1>-->
+				<!--</header>-->
+				<!--<div class="mui-content">这是div模式选项卡中的第4个子页面.</div>-->
+			<!--</div>-->
+			<div id="mine" class="mui-control-content">
+				<header class="mui-bar mui-bar-nav">
+					<h1 class="mui-title">我的</h1>
+				</header>
+				<div class="mui-content">
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell mui-media">
+							<a class="mui-navigate-right" href="information.html">    
+                				<img class="mui-media-object mui-pull-left" src="${member.face!''}">
+								<div class="mui-media-body">
+									<p><b>昵称：</b>${member.nickname!''}</p>
+									<!-- <p class='mui-ellipsis'><b>电话号：</b>15800212541</p> -->
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="content">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="../../member/address-list.html">
+								<img src="${ctx}${themes_path}/App_Shop/myimages/mine/address.png"/>
+								<span>收货地址</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="purse.html">
+								<img src="${ctx}${themes_path}/App_Shop/myimages/mine/purse.png"/>
+								<span>我的钱包</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="../../member/my-collect.html?type=goods">
+								<img src="${ctx}${themes_path}/App_Shop/myimages/mine/collect.png"/>
+								<span>我的收藏</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="consult.html">
+								<img src="${ctx}${themes_path}/App_Shop/myimages/mine/consult.png"/>
+								<span>我的咨询</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="${ctx}/member/order-list.html">
+								<img src="${ctx}${themes_path}/App_Shop/myimages/mine/orders.png"/>
+								<span>我的订单</span> 
+							</a>
+						</li>
+						<!-- <li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<img src="${ctx}${themes_path}/App_Shop/myimages/mine/grop.png"/>
+								<span>团购订单</span>
+							</a>
+						</li> -->
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="mine-msg.html">
+								<img src="${ctx}${themes_path}/App_Shop/myimages/mine/massage.png"/>
+								<span>我的消息</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="logout">
+								<img src="${ctx}${themes_path}/App_Shop/myimages/mine/setting.png"/>
+								<span>退出</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
+			<div class="cart-change">
+				<p>商品名称：<span class="shop_name"></span></p>
+				<p>价格：￥ <span class="shop_price"></span></p>
+				<p>规格： <span class="shop_other"></span></p>
+				<input type="hidden" class="goods_tools" goodsid="0" storeid="0">
+				<div class="goods_num">
+					<p>数量：</p>
+					<label><span class="goods_cut">-</span><input type="text" value="1" class="goodsnum" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"/><span class="goods_add">+</span></label>
+					<p class="goods_s">库存：<span class="store_num"></span></p>
+				</div>
+				<br> 
+				<input type="button" class="add_cart"  value="加入购物车"/>
+			</div>
+		</div>
+		<div id="mypopup">
+			
+			<div class="prompt">
+				<p id="wxts">温馨提示</p>
+				<p id="hintinfo"></p>
+				<a id="closepopup">确定</a>
+			</div>
+		</div>
+		<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+		<script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+        <script src="${ctx}${themes_path}/App_Shop/js/layer/layer.js"></script>
+		<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+		<script>
+		$(function(){
+			//判断显示哪个页签
+			var id = "";
+			if(localStorage.act == undefined || localStorage.act == "undefined" ||localStorage.act== ""){
+				id = "home";
+			}else{
+				id = localStorage.act;
+			}
+			$("nav .mui-tab-item").removeClass("mui-active");
+			$("nav .mui-tab-item[href='#" + id + "']").addClass("mui-active");
+			$(".mui-content .mui-control-content").removeClass("mui-active");
+			$("#" + id).addClass("mui-active");
+			
+			//跳转页面之前记录当前所在页签
+			$("nav .mui-tab-item").on("tap", function(){
+				localStorage.act = $(this).attr("href").substring(1, $(this).attr("href").length);
+			});
+			
+			//购物车跳转
+			$("#cart").on("tap", function (e) {
+				e.preventDefault();
+				location.href = "../../cart.html";
+			});
+			
+			//商品列表
+			$(".shop_list").on("tap",function(){
+				var cat_id = $(this).attr("value");
+				location.href = ctx + '/goods-list.html?cat=' + cat_id;
+			});
+			
+			///搜索
+			$(".search-nav").on("tap",function(){
+				location.href = "search.html";
+			})
+			
+			//登出
+			$(".logout").on("tap", function (e) {
+				var btnArray = ['否', '是'];
+                mui.confirm('是否退出登录？', '提示', btnArray, function(e) {
+                    if (e.index == 1) {
+                    	$myAjax({
+                            url : ctx + '/api/shop/member/logout.do',
+                            dataType:'json',
+                            type:'post',
+                            async: false,
+                            timeout:10000,//超时时间设置为10秒；
+                            success : function(result) {
+                                if (result.result == 1) {
+                                	localStorage.removeItem("check");
+                                    setTimeout(function(){
+                                        $.closeLoading();
+                                    }, 300);
+                                }
+                            }
+                        });
+                        location.href = ctx + '/App_Shop/login/login.html';
+                    } else {
+                        console.log('取消退出，继续使用！');
+                    }
+                })
+			});	
+			//团购状态位
+			function time(){
+				var time_now = Date.parse(new Date());
+				 $(".buying_date").each(function(){
+					 if(new Date($(this).val()).getTime() > time_now){
+					 	$(".buying").text("正在抢购中");
+					 	$(".buying").addClass("red_btn");
+					 } else {
+					    $(".buying").text("已结束");
+					 	$(".buying").addClass("green_btn");	
+					}
+				 });
+				
+			}
+			time();
+			if(isAndroid){
+				//手机物理后退键按钮
+				document.addEventListener("backbutton", onBackKeyDown, false);
+				function onBackKeyDown(e) {
+				   e.preventDefault();
+				   layer.open({
+		               content: '确认退出登录？',
+		               btn: ['确定', '取消'],
+		               yes: function(index){
+		            	   layer.close(index);
+		            	   localStorage.removeItem("check");
+		            	   location.href = ctx + '/App_Shop/login/login.html';               
+		               }
+		           });
+				}
+			}
+			//加入购物车加减按钮操作
+			//减
+			$(".goods_cut").click(function(){
+				var goodsnum = parseInt($(".goodsnum").val());
+				if(goodsnum>1){
+					$(".goodsnum").val(goodsnum-1);
+				}
+				else{
+					$("#hintinfo").text("抱歉，最少需要一件商品");
+					popup.show();
+					$("#closepopup").on("tap",function(){
+						popup.hide();
+					});	
+				}
+			});
+			//加
+			$(".goods_add").click(function(){
+				var store = parseInt($(".store_num").text());
+				var goodsnum = parseInt($(".goodsnum").val());
+				if(goodsnum<store){
+					$(".goodsnum").val(goodsnum+1);
+				}
+				else{
+					$("#hintinfo").text("抱歉，购买商品不能大于库存");
+					popup.show();
+					$("#closepopup").on("tap",function(){
+						popup.hide();
+					});	
+				}
+			});
+			//验证num框
+			$(".goodsnum").blur(function(){
+				var goodsnums = parseInt($(this).val());
+				
+				//验证库存
+				if(goodsnums>store){
+					$("#hintinfo").text("请输入小于库存的数量");
+					popup.show();
+					$("#closepopup").on("tap",function(){
+						popup.hide();
+					});
+					$(this).val(parseInt(1));
+				}
+				//验证数量
+				if(goodsnums<1){
+					$("#hintinfo").text("最少买一件哦");
+					popup.show();
+					$("#closepopup").on("tap",function(){
+						popup.hide();
+					});	
+					$(this).val(parseInt(1));
+				}
+			});
+			
+			//加入购物车
+			$('.add_cart').on("tap",function(){
+				var gnuma = $(".goodsnum").val();
+				var gida = $(".goods_tools").attr("goodsid");
+				var addstoreid = $(".goods_tools").attr("storeid");
+				var productid = $("#productid").val();
+				$.ajax({
+					url: ctx + "/api/store/store-cart/add-goods.do?goodsid="+gida+"&store_id="+addstoreid+"&num="+gnuma,
+					dataType:"json",
+					success : function(data) {	
+						if(data.result==1){	
+							show.close_cover();
+							$("#picture").removeClass("mui-active");
+							$("#picture").hide();
+							$(".mui-backdrop-action").remove();							
+							$("#hintinfo").text("加入购物车成功");							
+							popup.show();
+							$("#closepopup").on("tap",function(){
+								popup.hide();
+							});
+							setTimeout(function(){
+								location.href=ctx+"/App_Shop/page1/index.html";
+	                		},2000);
+							$.ajax({
+								url: ctx + "/api/shop/cart/get-cart-data.do",
+								dataType:"json",
+								success:function(result){
+									if(result.result==1){  
+										var goodscartnum = result.data.count;
+										$(".my_cart span").empty();
+										$(".my_cart span").text(goodscartnum);
+									}else{
+										show.close_cover();          //关闭遮罩
+										$("#hintinfo").text(result.message);
+										popup.show();
+										$("#closepopup").on("tap",function(){
+											popup.hide();
+										});	
+									}
+									
+								},error:function(){
+									show.close_cover();
+									$("#hintinfo").text("抱歉，收藏出现意外错误");
+									popup.show();
+									$("#closepopup").on("tap",function(){
+										popup.hide();
+									});	
+									
+				                	
+								}
+							});
+						}
+						else{	
+							show.close_cover();          //关闭遮罩
+							$("#hintinfo").text(result.message);
+							popup.show();
+							$("#closepopup").on("tap",function(){
+								popup.hide();
+							});	
+						}
+					}
+				})
+			})
+			//首页购物车数量
+			$.ajax({
+				url: ctx + "/api/shop/cart/get-cart-data.do",
+				dataType:"json",
+				success:function(result){
+					if(result.result==1){
+						var goodscartnum = result.data.count;
+						$("#cart_num").empty();
+						$("#cart_num").text(goodscartnum);
+					}else{
+						show.close_cover();          //关闭遮罩
+						$("#hintinfo").text(data.message);
+						popup.show();
+						$("#closepopup").on("tap",function(){
+							popup.hide();
+						});	
+					}
+				},error:function(){
+					show.close_cover();          //关闭遮罩
+					$("#hintinfo").text("抱歉，收藏出现意外错误");
+					popup.show();
+					$("#closepopup").on("tap",function(){
+						popup.hide();
+					});	
+				}
+			});
+			
+		})
+		
+			
+		</script>
+	</body>

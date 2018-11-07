@@ -1,0 +1,148 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+
+<style>
+.input_text{width: 200px;}
+.left{width:410px;}
+.table-right{width:130px;float:none;}
+
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form id="dlyCenterEditForm" method="post" class="validate">
+			<table>
+			 <tr>
+					<th>商品编号：</th>
+					<td class="left"><input class="input_text" data-options="required:true" type="text" id="sn" name="sn"  <#if apart?exists> value="${apart.sn!''}"</#if> 
+						></input>
+					<input type="hidden" id="id3" name="customerId" />
+					<input type="hidden" id="id5"  name="id5"/>
+					</td>
+					<th>团购商品：</th>
+					<td class="left"><input class="input_text "  type="text" id="name" maxlength="20"
+						name="name" data-options="required:true" readonly="true" <#if apart?exists> value="${apart.name!''}"</#if> 
+						></input>
+					</td>
+					</tr>
+					<tr>
+					<th>商品店铺：</th>
+					<td class="left"><input class="input_text " data-options="required:true"  type="text" id="store_name" maxlength="20"
+						name="store_name" readonly="true" <#if apart?exists> value="${apart.store_name!''}"</#if> 
+						></input>
+					<th>起团数量：</th>
+					<td class="table-right"><input class="input_text easyui-numberbox" type="text" id="buying_number" maxlength="20"
+						name="buying_number" data-options="required:true" <#if apart?exists> value="${apart.buying_number!''}"</#if>
+						></input>
+					</td>
+				</tr>
+				<tr>
+					<th>预付定金：</th>
+					<td class="left"><input class="input_text easyui-numberbox" type="text" id="earnest" 
+						name="earnest" data-options="required:true,precision:2" <#if apart?exists> value="${apart.earnest!''}"</#if>
+						></input>
+					</td>
+					<th>团购金额：</th>
+					<td class="table-right"><input class="input_text easyui-numberbox" type="text" 
+						name="buying_money" data-options="required:true,precision:2" <#if apart?exists> value="${apart.buying_money!''}"</#if> ></input>
+					</td>
+				</tr>
+
+				<tr>
+					<th>团购开始时间：</th>
+					<td class="table-right"><input name="start_date" id="start_date"  class="input_text easyui-datetimebox" data-options="required:true" type="text" <#if apart?exists> value="<@dateformat time="${apart.start_date!''}" pattern="yyyy-MM-dd HH:mm:ss"/>" </#if> />
+					</td>
+					<th>团购结束时间：</th>
+					<td class="table-right"><input name="end_date" id="end_date" class="input_text easyui-datetimebox" data-options="required:true" type="text" <#if apart?exists> value="<@dateformat time="${apart.end_date!''}" pattern="yyyy-MM-dd HH:mm:ss"/>" </#if> />
+					</td>
+				</tr>
+				<tr>
+				
+				<th>虚拟已团数量：</th>
+					<td class="table-right"><input class="input_text easyui-numberbox" type="text" <#if apart?exists> value="${apart.fictitious_number!''}"</#if>
+						name="fictitious_number"  data-options="required:true" ></input>
+					</td> 
+				
+				</tr>
+				<tr>
+					
+				
+					<td class="table-right"><input class="input_text " data-options="required:true" type="hidden" <#if apart?exists> value="${apart.number!''}"</#if>
+						name="number" id="number" ></input>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="dly_center_id" value="">
+		</form>
+	</div>
+</div>
+<script>
+
+$(function(){
+
+	/* $('#sn').combobox({
+        valueField: 'id3', 
+        textField: 'sn',
+        hasDownArrow: false,
+
+       onChange: function (newValue, oldValue) {
+       	 $('#sn').val("");
+       	$('#id3').val("");
+            if (newValue != null) {
+            		var thisKey = encodeURIComponent($('#sn').combobox('getText')); //搜索词
+               		var urlStr = "${ctx}/b2b2c/admin/group-buying/queryCustomer.do?queryStr=" + thisKey;
+                	var v = $("#sn").combobox("reload", urlStr);
+                
+            }
+        },
+       
+        onSelect: function (record) {
+        	alert(record.sn)
+            $('#sn').val(record.sn);
+            $('#id3').val(record.id3);
+       	 var sn=record.sn;
+    
+    	 $.ajax({
+    			type : "POST",
+    			url : '${ctx}/b2b2c/admin/group-buying/querySn.do?sn=' +sn,
+    			dataType : "json",
+    			cache : false,
+    			success : function(result) {
+    				
+    				$("#name").val(result.obj.name);
+    				$("#store_name").val(result.obj.store_name);
+    				$("#id5").val(sn);
+    				
+
+    			
+    			},
+    			error : function(XMLHttpRequest, textStatus, errorThrown) {
+    			}
+    		});	
+    }
+}); */
+	$("#sn").combobox({
+		disabled : false,
+		url : '${ctx}/b2b2c/admin/group-buying/batteryCombox.do',
+		cache : false,
+		valueField : 'sn',
+		textField : 'sn',
+		hasDownArrow : false,
+		onChange : function(newValue,oldValue){
+			$("#sn").val("sn", "");
+		
+		},
+		onSelect : function(rec) {
+		
+			//$("#sn").val("setValue",rec.sn);
+			$("#name").val(rec.name);
+			$("#store_name").val(rec.store_name);
+			$("#id5").val(rec.sn);
+		}
+	});	
+});
+
+
+
+
+
+
+</script>

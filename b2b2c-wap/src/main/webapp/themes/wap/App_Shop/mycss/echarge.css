@@ -1,0 +1,52 @@
+/*充值页面css*/
+#echarge{
+    margin-top: 20px;
+    background-color: #fff;
+    height: 40px;
+}
+#echarge .echarge-num{
+    width: 70%;
+    float:right;
+    border: 0 solid transparent;
+}
+#echarge b{
+    line-height: 40px;
+    margin-left: 15px;
+}
+#echarge .mui-content-padded{
+    text-align: center;
+}
+#echarge .btn{
+    width: 35%;
+    height: 40px;
+    border-radius: 5px;
+    letter-spacing:5px;
+}
+#echarge .echargebtn {
+    background-color: #e73602 !important;
+    border-color: #e73602 !important;
+    color: #FFFFFF !important;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+/*查询明细页面css*/
+#inquire .inquire-content{
+    width: 70%;
+    letter-spacing: 1px;
+    display: inline-block
+}
+#inquire .num{
+    width: 25%;
+    text-align: right;
+    vertical-align: super;
+}
+#inquire .time{
+    color: #ccc;
+}
+#inquire .mui-table-view-cell:after{
+    left:0;
+}
+.mui-content>.mui-table-view:first-child{margin:0}
+#inquire .li_bg1 { background:#FFF; }
+#inquire .li_bg2 { background:#F4F4F4; }
+

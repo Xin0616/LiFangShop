@@ -1,0 +1,37 @@
+<#assign  title="站内消息" />
+<#assign messageFrontTag = newTag("messageFrontTag")>
+<#assign messagesFront = messageFrontTag()>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>我的消息</title>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/msg.css"/>
+
+<body class="body-bg">
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">我的消息</h1>
+</header>
+<div class="mui-content">
+    <#list messagesFront.messagesList as message>
+    <div id="mine-msg">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right" href="detail-msg.html?msgId=${message.msg_id}&status=${messagesFront.status}">
+                    <div class="msg-content">
+                        <span>${message.msg_title!''}</span><br/>
+                       		 发布人：<span>${message.adminuser_name!''}</span>
+                        <p class="font-size-small"><@dateformat time="${message.send_time?c}" pattern="yyyy-MM-dd HH:mm:ss"/></p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    </#list>
+    <@pager pageno="${messagesFront.page!'1'}" pagesize="${messagesFront.pageSize}" totalcount="${messagesFront.totalCount}" />
+</div>
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>

@@ -1,0 +1,23 @@
+
+#mine p{
+    color: #333;
+    line-height: 50px;
+    padding-top:5px ;
+}
+#mine .content{
+    padding:10px 0;
+}
+#mine .mui-table-view .mui-media-object{
+    max-width: 60px;
+    height: 60px;
+    line-height: 60px;
+}
+#mine .content img,#mine .content span{vertical-align: middle}
+#mine .mui-navigate-right:after, .mui-push-left:after, .mui-push-right:after{
+    color: #3a3a3a;
+}
+#mine .mui-table-view-cell:after{
+    left: 0;
+    background-color:#cccccc;
+}
+#mine .content .mui-table-view-cell a{margin:-18px -14px}

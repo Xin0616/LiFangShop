@@ -1,0 +1,72 @@
+<#assign  title="我的钱包" />
+<#include '/common/header.html'/>
+<#assign memberIsLoginTag = newTag("memberIsLoginTag")>
+<#assign isLogin = memberIsLoginTag()>
+<#if isLogin>
+	<#assign memberInfoTag = newTag("memberInfoTag")>
+	<#assign member = memberInfoTag()>
+</#if>
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/purse.css"/>
+
+<body class="body-bg">
+    <div id="purse">
+        <div class="logo" style="background: url(<#if member.face != "">${member.face}<#else>${ctx}${themes_path}/App_Shop/myimages/mine/cbd.jpg</#if>);background-size: 100px 100px;">
+        </div>
+        <div class="mui-content">
+            <div class="mui-content-padded">
+<!--                 <b>积分</b>：<span>8390</span> -->
+<!--                 <br/> -->
+                <b>账户余额</b>：<span>￥ ${member.balance}</span>
+            </div>
+            <div class="mui-content-padded">
+                <input id="echarge" class="echargebtn font-size-big btn" type="button" value="充值">
+            </div>
+            <div class="mui-content-padded">
+                <input id="inquire" class="inquirebtn font-size-big btn" type="button" value="明细查询">
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="url" value="/App_Shop/page1/index.html">
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<script>
+	$(function(){
+		var module = new Module();
+		var url = $("#url").val();
+        backHistory();
+        function backHistory() {
+            module.navigator.init({
+                title: '我的钱包',
+                left : {
+                    click: function () {
+                    	location.href = ctx + url;
+                    	IndexMine();
+                    }
+                }
+            });
+        }
+    
+    	if(isAndroid){
+	        document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+	    //点击充值按钮跳转到注册界面
+	    document.getElementById('echarge').addEventListener('tap', function() {
+	        //打开注册页面
+	        mui.openWindow({
+	            url: 'echarge.html'
+	        });
+	    });
+	    //点击明细查询按钮跳转到注册界面
+	    document.getElementById('inquire').addEventListener('tap', function() {
+	        //打开注册页面
+	        mui.openWindow({
+	            url: 'inquire.html'
+	        });
+	    });
+	});
+</script>

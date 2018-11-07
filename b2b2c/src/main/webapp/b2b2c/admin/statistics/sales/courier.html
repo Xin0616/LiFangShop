@@ -1,0 +1,67 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		
+		
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="70" align="right"></td>
+					<td>
+						<input type="text"  id="start_date"  class="input_text easyui-datebox" >
+				
+						<a id="searchAdvance" class="button blueButton" onclick="searchApartments()" href="javascript:;">搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		
+			<table class="easyui-datagrid"  url="${ctx}/b2b2c/admin/courier/list-json.do?market_enable=${market_enable!''}" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true"  width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc">
+				<thead>
+					<tr>
+						
+						<th data-options="field:'name',width:120" >送货员</th>
+						<th data-options="field:'number',width:70" >单量</th>
+						<th data-options="field:'zonger',width:70" >订单总额</th>
+						<th data-options="field:'goods_amounts',width:45">现金充值</dth>
+						<th data-options="field:'no_order',width:50" >未支付单数</th>
+						<th data-options="field:'goods_amount',width:45" >应收现金</th>
+	
+					</tr>
+				</thead>
+				
+			</table>
+		</div>
+	</form>
+	<div id="editInfo"></div>
+</div>
+<script type="text/javascript">
+
+
+
+function searchApartments() {
+	
+	var start_date = $('#start_date').datebox('getValue');
+	$("#goodsdata").datagrid('load', {
+		type : 1,
+		start_date,start_date,
+		page : 1
+	});
+}
+
+</script>
+

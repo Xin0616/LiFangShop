@@ -1,0 +1,67 @@
+<#assign  title="我的收藏" />
+<#include '/common/header.html' />
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+<#if member??>
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/css/member-items.css"/>
+
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/my-collect.js"></script>
+
+    <#assign collectTag = newTag("collectTag") />
+    <#assign collect = collectTag()!'' />
+
+    <#assign storeCollectTag = newTag("storeCollectTag") />
+    <#assign storeCollect = storeCollectTag()!'' />
+	<div style="width:100%;height:45px;"></div>
+    <div class="my-collect">
+        <div class="collect-nav">
+            <span class="nav-item nav-goods" id="goods">
+                <#if collect.result?exists >
+                    <#assign collectSize = collect.result?size />
+                </#if>
+                <a href="javascript:;">收藏的商品</a>
+            </span>
+            <span class="nav-item nav-store active" id="store">
+                <#if storeCollect.storelist.result?exists >
+                    <#assign storeCollectSize = storeCollect.storelist.result?size />
+                </#if>
+                <a href="javascript:;">收藏的店铺</a>
+            </span>
+            <i class="nav-hr"></i>
+        </div>
+
+        <div class="collect-content">
+            <#assign collectTag = newTag("collectTag") />
+            <#assign collect = collectTag()!'' />
+            <div class="content-item content-store">
+                <#assign storeCollect = storeCollect.storelist.result />
+                <#if storeCollect?exists && (storeCollect?size > 0) >
+                    <#list storeCollect as store >
+                        <div class="store-item">
+                            <div class="store-item-banner">
+                                <img src="${store.store_logo!''}" alt="${store.store_name!''}" class="img-store-banner tap" data-href="${ctx}/store/store-index.html?show_c=1&store_id=${store.store_id}">
+                            </div>
+                            <div class="store-item-tools">
+                                <span class="store-item-name">${store.store_name!''}</span>
+                                <div class="store-item-btns">
+                                    <a href="javascript:;" class="delete" collect-id="${store.id!'0'}" store-id="${store.store_id!'0'}">取消收藏</a>
+                                    <a href="javascript:;" class="to-store tap" data-href="${ctx}/store/store-index.html?show_c=1&store_id=${store.store_id}">进入店铺</a>
+                                </div>
+                            </div>
+                        </div>
+                    </#list>
+                <#else/>
+                    <div class="eui-nodata">
+                        <img src="${ctx}/statics/e_tools/images/beifang/beifang-no_collect.png">
+                    </div>
+                </#if>
+            </div>
+        </div>
+        <div class="list_page" style="margin-top:20px;">
+	        <@pager pageno="${page!'1'}" pagesize="${collect.pageSize}" totalcount="${collect.totalCount}" />
+	    </div>
+		<input type="hidden" id="url" value="/App_Shop/page1/index.html">
+    </div>
+</#if>
+</body>
+</html>

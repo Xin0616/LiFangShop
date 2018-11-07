@@ -1,0 +1,59 @@
+
+<div class="dialog_content" style="margin: 0px; padding: 0px;">
+	<div class="quick-login">
+		<form  method="post" class="validate" id="login_form">
+			<input type="hidden" value="${forward!''}" name="forward" >
+			<dl >
+				<dt>鐢ㄦ埛鍚嶏細</dt>
+				<dd>
+					<input type="text" id="username" name="username" autocomplete="off" class="text">
+				</dd>
+			</dl>
+			<dl>
+				<dt>瀵�nbsp;&nbsp;&nbsp;鐮侊細</dt>
+				<dd>
+					<input type="password" id="password" autocomplete="off"
+						name="password" class="text">
+				</dd>
+			</dl>
+			<dl>
+				<dt>楠岃瘉鐮侊細</dt>
+				<dd class="m_account">
+					<input type="text" tabindex="3" name="validcode" isrequired="true"
+						size="8" autocomplete="off" class="text w60" id="validcode" />
+					<img src="${ctx}/validcode.do?vtype=memberlogin" alt="浼氬憳鐧诲綍楠岃瘉鐮� style="width:60px;height:30px;" />
+					
+					<span class="m_forget">
+						<a href="javascript:;">鎹釜鍥剧墖</a>
+					</span>
+				</dd>
+			</dl>
+			<ul>
+				<li>鈥�nbsp;濡傛灉鎮ㄦ病鏈夌櫥褰曞笎鍙凤紝璇峰厛<a class="register"
+					href="${ctx}/member/register/fill_mobile.html">娉ㄥ唽浼氬憳</a>鐒跺悗鐧诲綍
+				</li>
+				<li>鈥�nbsp;濡傛灉鎮ㄥ繕璁板瘑鐮侊紵<a class="forget"
+					href="${ctx}/find-passwordByEmail.html">鎵惧洖瀵嗙爜</a>
+				</li>
+			</ul>
+			<div class="enter">
+				<input type="button" value="鐧�nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;闄� class="submit regis_ent">
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+$(function(){
+	
+	// 鐐瑰嚮鎹釜鍥剧墖 鏇存崲楠岃瘉鐮�
+	$(".m_forget a").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	
+	// 鐐瑰嚮鍥剧墖  鏇存崲楠岃瘉鐮�
+	$(".m_account img").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+});
+
+</script>

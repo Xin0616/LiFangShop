@@ -1,0 +1,57 @@
+	<#assign  title="忘记密码" />
+	<#include '../../common/header.html'/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>忘记密码</title>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/register.css"/>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">忘记密码</h1>
+</header>
+<div id="save-content">
+    <form class="mui-input-group">
+        <div class="content">
+            <div class="mui-input-row">
+                <label for="telephone">手机号</label>
+                <input id='telephone' data-options='{required:true,dataType:"phone"}' name="telephone" type="text" class="mui-input-clear mui-input" placeholder="输入手机号码">
+            </div>
+            <div class="mui-input-row" style="position: relative">
+                <label for="code">验证码</label>
+                <input id='code' type="text" class="mui-input" placeholder="输入验证码">
+                <div class="collect-code" id="get_code">
+                    获取验证码
+                </div>
+            </div>
+            <div class="mui-input-row">
+                <label for="pwd">新密码</label>
+                <input id='pwd' type="password" data-options='{required:true}' name="pwd" class="mui-input-clear mui-input" placeholder="设置您的登录密码">
+            </div>
+            <div class="mui-input-row">
+                <label for="confirm-pwd">确认密码</label>
+                <input id='confirm-pwd' type="password" data-options='{required:true}' name="confirm-pwd" class="mui-input-clear mui-input" placeholder="再次确认密码">
+            </div>
+        </div>
+    </form>
+    <div class="mui-content-padded">
+        <button id='save' class="mui-btn mui-btn-block mui-btn-primary">保存</button>
+    </div>
+</div>
+<div id="mypopup">
+	
+	<div class="prompt">
+		<p id="wxts">温馨提示</p>
+		<p id="hintinfo"></p>
+		<a id="closepopup">确定</a>
+	</div>
+</div>
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/layer/layer.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/page/forget-pwd.js"></script>

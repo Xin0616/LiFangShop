@@ -1,0 +1,107 @@
+<#include '/admin/header.html' >
+
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+						&nbsp&nbsp&nbsp&nbsp日期：
+			<input class="easyui-datebox" style="width: 260px;height: 28px;" id="start_time" />
+                        <span>&nbsp;~&nbsp;</span>
+                        <input class="easyui-datebox" style="width: 260px;height: 28px;" id="end_time" />
+                        
+						<select id="paystatus" class="inputSelect valid" style="width: 145px;">
+							<option value="">---所有---</option> 
+							<option value="1">支付宝</option> 
+							<option value="2">微信</option> 
+							
+						</select>
+					
+						<a id="searchAdvance" class="button blueButton" onclick="searchApartments()" href="javascript:;">开始搜索</a>
+					
+				</tr>
+			</table>
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		
+			<table class="easyui-datagrid"  url="${ctx}/b2b2c/admin/memberRecord/memberStatistics_list-json.do?market_enable=${market_enable!''}" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true"  width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc">
+				<thead>
+					<tr>
+						
+						<th data-options="field:'nickname',width:120,sortable:'true'" >用户昵称</th>
+						<th data-options="field:' ',width:45" formatter="formatPeople">工作人员</th>
+						<th data-options="field:'apply_num',width:45" formatter="formatMoney" >充值金额</th>
+						<th data-options="field:'pay_type',width:50" formatter="formatStatus" >支付方式</th>
+						<th data-options="field:'apply_date',sortable:'true',width:55" formatter="formatTime">充值时间</th>
+						
+					</tr>
+				</thead>
+				
+			</table>
+		</div>
+	</form>
+	<div id="editInfo"></div>
+</div>
+<script type="text/javascript">
+function formatStatus(value,row,index){
+	if(value==1){
+		return "支付宝"
+	}else if(value==2){
+		return "微信";
+	}else{
+		return "未定义";
+	}
+}
+
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatTime(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+}
+
+function formatPeople(value,row,index){
+	return "自动收款"
+}
+
+
+
+
+function searchApartments() {
+	var paystatus =$('#paystatus').val();
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue'); 
+	if(start_time != '' && end_time != ''){
+		if(end_time < start_time){
+			$.Loading.error("结束时间不能小于开始时间");
+			return ;
+		}
+	}
+
+	$("#goodsdata").datagrid('load', {
+		start_time:start_time,
+		end_time : end_time,
+		paystatus : paystatus,
+	});
+}
+
+
+</script>
+

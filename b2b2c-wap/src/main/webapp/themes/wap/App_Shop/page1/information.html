@@ -1,0 +1,155 @@
+<#assign  title="个人中心" />
+<#include '/common/header.html'/>
+<#assign apartListTag = newTag("apartmentListTag")>
+<#assign apartmentList = apartListTag('{"type":0}')>
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign member = memberLoginCheckTag() />
+<#if member.face?exists && member.face != ''>
+	<#assign imgUrl = member.face/>
+<#else>
+	<#assign imgUrl = '/App_Shop/myimages/mine/cbd.jpg'/>
+</#if>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>个人信息</title>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+    <link href="${ctx}${themes_path}/App_Shop/css/mui.picker.css" rel="stylesheet" />
+    <link href="${ctx}${themes_path}/App_Shop/css/mui.poppicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/register.css"/>
+	<style>
+        #info-content .change-content{
+            text-indent: 0;
+            width: 70%;
+            display: inline-block;
+        }
+        #info-content .change-content>a{
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            width: 20%;
+            background: #E73602;
+            color: #fff;
+            letter-spacing: 1px;
+            border: 0 solid transparent;
+            border-radius: 5px;
+        }
+        #info-content .sexCheck{
+        	width: 35%;
+        	text-align:center;
+        	display: inline-block
+        }
+        #info-content .mui-radio.mui-left input[type=radio]{
+        	left:70%
+        }
+        .choose{
+            position: fixed;
+		    z-index: 9;
+		    width: 100%;
+		    background-color: #666666;
+		    bottom: 50%;
+        }
+        .choose div{
+        	height: 150px;
+    		font-size: 24px;
+		    border: 1px solid white;
+		    color: white;
+		    line-height: 150px;
+		}
+    </style>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">个人信息</h1>
+    </header>
+    <div id="info-content">
+    	<div id="maskDiv" style="display: none;">
+	    	<div class="mui-row choose">
+	    		<div class="mui-col-sm-6 mui-col-xs-6 mui-text-center local" style="border-right: 1px solid;">
+		        	相册
+		        </div>
+	    		<div class="mui-col-sm-6 mui-col-xs-6 mui-text-center camera">
+		        	拍照
+		        </div>
+	    	</div>
+    	</div>
+        <form id="info-form" class="mui-input-group">
+            <div class="content">
+                <div class="mui-input-row" style="height: 70px">
+                    <label style="line-height: 50px">头像</label>
+                    <@image id="face" src="${imgUrl}" style="width: 60px;height:60px;float: right;margin: 5px 10px"/>
+                </div>
+                <div class="mui-input-row">
+                    <label for="telephone">我的电话</label>
+                    <input id='telephone' readonly="readonly" class="right" data-options='{required:true,dataType:"phone"}' name="telephone" value="${member.mobile!''}"/>
+                </div>
+                <div class="mui-input-row">
+                    <label for="nickname">昵称</label>
+                    <input id='nickname' class="right" name="nickname" data-options='{required:true}' value="${member.nickname!''}"/>
+                </div>
+                <div class="mui-input-row">
+                    <label>性别</label>
+                    <div class="mui-input-row mui-radio mui-left sexCheck" >
+                        <label>男</label>
+                        <input class="sex-chose" name="sex" type="radio" <#if member.sex!=0>checked</#if> value="1" />
+                    </div>
+                    <div class="mui-input-row mui-radio mui-left sexCheck">
+                        <label>女</label>
+                        <input class="sex-chose" name="sex" type="radio" <#if member.sex!=1>checked</#if> value="0" />
+                    </div>
+                </div>
+                <div class="mui-input-row">
+                    <label for="job">职业</label>
+                    <input id='job' class="right" name="job" value="${member.job!''}"/>
+                </div>
+                <div class="mui-input-row">
+                    <label>所属小区</label>
+                    <p style="text-indent: 0;" class="change-content">
+                       <input onkeyup="Change(this);" type="text" id="customerName" name="customerName" data-options='{required:true}' class="mui-input-row input-setting" value="${member.apartment_name!''}">
+                       <input id="apartment_id" type="hidden" value="${member.apartment_id!''}"/>
+                       <a href="#query" class="mui-btn mui-btn-block mui-text-center font-size-middle button1 mypopvers">查找</a>
+                    </p>
+                </div>
+                <div id="query" class="mui-popover" style="width: 80%;height:300px;">
+                    <div class="mui-popover-arrow"></div>
+                    <div class="mui-scroll-wrapper">
+                        <div class="mui-scroll">
+                            <ul id="list_obj" class="mui-table-view mui-table-view-radio">
+								<#list apartmentList as apart>
+								<li id="change-li" class='mui-table-view-cell' onclick='selected1(this);'>
+                                    <a href='#'>${apart.name}</a>
+                                    <input type="hidden" value="${apart.id}"/>
+                                </li>
+								</#list>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="mui-input-row">
+                    <label for="address_num">楼号</label>
+                    <input id='address_num' name="address_num" class="right" value="${member.block_num!''}"/>
+                </div>
+            </div>
+        </form>
+        <div class="mui-content-padded">
+            <button id='info' class="mui-btn mui-btn-block mui-btn-primary">保存</button>
+        </div>
+    </div>
+    <input type="hidden" id="url" value="/App_Shop/page1/index.html">
+    <div id="mypopup">
+		
+		<div class="prompt">
+			<p id="wxts">温馨提示</p>
+			<p id="hintinfo"></p>
+			<a id="closepopup">确定</a>
+		</div>
+	</div>
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/layer/layer.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.picker.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.picker.all.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.poppicker.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/page/info.js"></script>

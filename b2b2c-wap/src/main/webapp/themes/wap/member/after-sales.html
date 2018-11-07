@@ -1,0 +1,79 @@
+<#assign  title="申请售后" />
+<#include '/common/header.html' />
+
+<#assign memberLoginCheckTag = newTag("memberLoginCheckTag") />
+<#assign memberInfo = memberLoginCheckTag() />
+<#if member??>
+    <link rel="stylesheet" href="${ctx}${themes_path}/css/member-order.css">
+    <script type="text/javascript" src="${ctx}${themes_path}/js/page/after-sales.js"></script>
+    <#assign orderDetailTag = newTag("orderDetailTag") />
+    <#assign orderDetail = orderDetailTag() />
+    <#assign shopPaymentListTag= newTag("shopPaymentListTag") />
+    <#assign paymentList = shopPaymentListTag() />
+    <#assign orderStautsTag = newTag("orderStautsTag") />
+    <#assign orderState = orderStautsTag() />
+    <#assign orderChildItemListTag = newTag("orderChildItemListTag") />
+    <#assign orderItemList = orderChildItemListTag("{'orderid':${orderDetail.order_id} }") />
+    <#assign goodsBaseDataTag = newTag("goodsBaseDataTag") />
+    <#assign goods = goodsBaseDataTag("'goodsid':${goods_id!0}") />
+    <div style="width:100%;height:45px;"></div>
+    <div class="after-sales">
+        <#if orderDetail.ship_status != orderState.SHIP_NO>
+            <#if orderDetail.pay_status == orderState.PAY_YES  >
+                <div class="after-sales-nav">
+                    <span class="nav-item nav-goods active" data-type="goods">
+                        <a href="javascript:;">退款申请</a>
+                    </span>
+                        <span class="nav-item nav-store" data-type="store">
+                    <a href="javascript:;">退货申请</a>
+                    </span>
+                        <i class="nav-hr"></i>
+                </div>
+            </#if>
+        </#if>
+
+        <div class="goods-box">
+            <#assign item_price = 0.00 />
+            <#assign item_num = 1 />
+            <#assign item_total_price = 0.00 />
+            <#list orderItemList.itemList as item>
+                <#if item.product_id == product_id?number>
+                    <div class="goods-img">
+                        <@image src="${goods.thumbnail!''}" alt="${goods.name}" class="img-goods-img" />
+                    </div>
+                    <div class="goods-info">
+                        <div class="name-goods-info">
+                            <@substring title="${goods.name}" length=80 dot="..." />
+                        </div>
+                        <div class="other-goods-info">
+                            <span class="price-goods-info">价格：￥${item.price?string("0.00")}</span>
+                            <input type="hidden" id="price" value="${item.price?string('0.00')}">
+                            <#assign item_price = item.price />
+                            <span class="num-goods-info">数量：${item.num}</span>
+                            <#assign item_num = item.num?number />
+
+                            <#assign item_total_price = item.price * item.num />
+                        </div>
+                    </div>
+                </#if>
+            </#list>
+        </div>
+
+        <div class="after-sales-content">
+            <div class="content-item refund show">
+                <!--退款-->
+                <#include './after-sales-refund.html' />
+            </div>
+            <div class="content-item returns">
+                <!--退货-->
+                <#include './after-sales-returns.html' />
+            </div>
+        </div>
+    </div>
+    <div class="eui-save-button">
+        <button type="button" id="submit-btn">提交申请</button>
+    </div>
+</#if>
+<style type="text/css">body {background-color: #f3f3f3;}</style>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<#assign  title="我的钱包" />
+<#include '/common/header.html'/>
+<#assign memberIsLoginTag = newTag("memberIsLoginTag")>
+<#assign isLogin = memberIsLoginTag()>
+<#if isLogin>
+	<#assign memberInfoTag = newTag("memberInfoTag")>
+	<#assign member = memberInfoTag()>
+</#if>
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/echarge.css"/>
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/mine.css"/>
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/purse.css"/>
+<<style>
+.echarge {
+    background-color: #fff;
+    height: 40px;
+}
+.echarge b {
+    line-height: 40px;
+    margin-left: 15px;
+}
+.echarge .echarge-num {
+    width: 70%;
+    float: right;
+    border: 0 solid transparent;
+}
+</style>
+<body class="body-bg" style="background: #efeff4;">
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">我的钱包</h1>
+    </header>
+    <div class="mui-content" id="purse">
+        <div class="echarge">
+            <b>消费（￥）</b><input type="text" id="apply_num" class="echarge-num" readonly/>
+            <input type="hidden" id="order_id" />
+        </div>
+        <div class="echarge" style="margin-top: 20px;">
+            <b>密码</b><input type="password" id="password" class="echarge-num"/>
+        </div>
+        <div class="mui-content-padded">
+            <input id="echarge" class="echargebtn font-size-big btn" type="button" value="确定" onclick="goToPay();">
+        </div>
+    </div>
+    <div id="mypopup">
+		
+		<div class="prompt">
+			<p id="wxts">温馨提示</p>
+			<p id="hintinfo"></p>
+			<a id="closepopup">确定</a>
+		</div>
+	</div>
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/layer/layer.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<script>
+	$(function(){
+		$("#apply_num").val(GetQueryString("apply_num"));
+		$("#order_id").val(GetQueryString("order_id"));
+		$("#password").focus();
+	});
+	function goToPay(){
+		$myAjax({
+		    url:ctx + '/api/shop/recharge/pay.do',
+		    data:{
+		    	order_id: $("#order_id").val(),
+		    	password: $("#password").val()
+		    },
+		    dataType:'json',
+		    type:'post',
+		    timeout:10000,//超时时间设置为10秒；
+		    success:function(data){
+		        if(data.result == 1){
+            		$("#hintinfo").text("支付成功！页面自动跳转");
+                    popup.show();
+            		$("#closepopup").on("tap",function(){
+            			popup.hide();
+            		});
+            		setTimeout(function(){
+            			location.href = ctx + "/member/order-list.html";
+            		},2000);
+		        }else{
+            		$("#hintinfo").text(data.message);
+                    popup.show();
+            		$("#closepopup").on("tap",function(){
+            			popup.hide();
+            		});
+		        }
+		    },
+		    error:function(xhr,type,errorThrown){
+		        //异常处理；
+		    	module.message.error('出现错误，请重试！');
+		    }
+		});
+	}
+</script>

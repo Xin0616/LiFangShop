@@ -1,0 +1,53 @@
+	<script type="text/javascript" src="${ctx}${themes_path}/js/touchslider.js"></script>
+	<!-- 婊氬姩骞垮憡 -->
+	<div class="adv" id="slider">
+		<ul class="major">
+			<!-- 鍒涘缓骞垮憡鏍囩 -->
+		<#assign advListTag= newTag("advListTag")>
+		<!-- 璋冪敤骞垮憡淇℃伅,浼犻�鍙傛暟acid:1 -->
+		<#assign adv = advListTag("'acid':'1'")!'' >
+		<!-- 鑾峰彇骞垮憡鍒楄〃 -->
+		<#assign advList = adv.advList />
+		<#if !advList?exists || advList?size==0> 
+			娌℃湁涓婁紶骞垮憡 
+		<#else>
+			<#list advList as adv>
+				<li class="" <#if adv_index == 0>style="display: list-item;"<#else>style="display:none;"</#if>>
+					<a target="_blank" title="${adv.aname!''}" href="${ctx}${adv.url}">
+						<@image border="0" src="${adv.atturl}" alt="${adv.aname!''}" />
+					</a>
+				</li>
+			</#list>
+		</#if>
+		</ul>
+		<div id="pagenavi"></div>
+	</div>
+
+	<script>
+$(function(){
+	var geshu= $(".major li").length;    //鑾峰彇澶у箙鍥剧墖涓璴i鐨勬�涓暟銆�
+	for(i=1;i<=geshu;i++){    //for寰幆锛屽畾i=1,姣忔寰幆灏卞姞1; 褰搃鐨勫�鐢�寰幆鍒扮瓑浜巖esult鐨勫�涓�牱鏃讹紙鍗斥�鏂囨湰妗嗙殑name='text'鐨勫�鈥濓級灏卞仠姝㈠惊鐜�
+		var createobj = $("<a></a>"); //鎶奷iv瀹氫箟涓哄彉閲廲reateobj
+		$("#pagenavi").append(createobj); //鎶奵reateobj杩欎釜鍙橀噺杩藉姞鍒癶tml涓殑'body'閲�
+		};
+		/*鍏蜂綋鎴戜篃娌″お璇绘噦*/
+		var active=0,                   
+		as=document.getElementById('pagenavi').getElementsByTagName('a');	
+		for(var i=0;i<as.length;i++){
+			(function(){
+				var j=i;
+				as[i].onclick=function(){
+					t2.slide(j);
+					return false;
+				}
+			})();
+		};
+		var t2=new TouchSlider({id:'slider', speed:600, timeout:4000, before:function(index){
+				as[active].className='';
+				active=index;
+				as[active].className='active';
+			}});
+	  /*寰幆婊氬姩缁撴潫*/
+	
+})
+</script>

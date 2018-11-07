@@ -1,0 +1,23 @@
+<div class="swiper-container">
+    <div class="adv-box-shadow"></div>
+    <div class="swiper-wrapper">
+        <#-- 创建广告标签 -->
+        <#assign advListTag= newTag("advListTag")>
+        <#-- 调用广告信息,传递参数acid:1 -->
+        <#assign adv = advListTag("'acid':'10'")!'' >
+        <#-- 获取广告列表 -->
+        <#assign advList = adv.advList />
+        <#if !advList?exists || advList?size==0>
+              没有上传广告
+        <#else/>
+            <#list advList as adv>
+            	<#if adv.url ??>
+                <img class="swiper-slide" src="<@imgurl pic='${adv.atturl}' />" data-href="${ctx}/${adv.url}" alt="${adv.aname!''}">
+            <#else/>
+                <img class="swiper-slide" src="<@imgurl pic='${adv.atturl}' />" data-href="" alt="${adv.aname!''}">
+            </#if>
+            </#list>
+        </#if>
+    </div>
+    <div class="swiper-pagination"></div>
+</div>

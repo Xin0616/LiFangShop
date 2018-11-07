@@ -1,0 +1,102 @@
+<!--退货-->
+<div class="returns-box" id="returns-form">
+    <div style="display: none;">
+        <input type="hidden" name="goodsId" value="${goods_id}">
+        <input type="hidden" name="orderid" value="${order_id}">
+        <#list orderItemList.itemList as item>
+            <#if item.goods_id == goods_id?number>
+                <input type="hidden" name="item_id" value="${item.item_id}">
+                <input type="hidden" name="productId" value="${item.product_id}">
+                <input type="hidden" name="payNum" value="${item.num}">
+                <input type="hidden" name="payNum" value="${item.num}">
+                <input type="hidden" name="price" value="${item.price}">
+            </#if>
+        </#list>
+    </div>
+
+    <!--是否收货-->
+    <div class="sales-item">
+        <div class="title-sales">是否收货</div>
+        <div class="content-sales">
+            <#if orderDetail.ship_status == orderState.SHIP_NO>
+                <span class="sales-btn selected">未收货</span>
+                <input type="hidden" value="0" name="ship_status">
+            </#if>
+            <#if orderDetail.ship_status != orderState.SHIP_NO  >
+                <#if orderDetail.pay_status == orderState.PAY_YES  >
+                    <span class="sales-btn selected">已收货</span>
+                    <input type="hidden" value="1" name="ship_status">
+                </#if>
+            </#if>
+        </div>
+    </div>
+
+    <!--退款方式-->
+    <div class="sales-item">
+        <div class="title-sales">退款方式</div>
+        <div class="content-sales">
+            <select name="refund_way" class="sales-select">
+                <option value="0">请选择退款方式</option>
+                <#list paymentList as payment  >
+                    <#if payment.type!="cod">
+                        <option value="${payment.name}"> ${payment.name} </option>
+                    </#if>
+                </#list>
+            </select>
+        </div>
+    </div>
+
+    <!--退款账户-->
+    <div class="sales-item">
+        <div class="title-sales">退款账户</div>
+        <div class="content-sales">
+            <input type="text" name="return_account" class="return-account sales-account-input" placeholder="请务必认真填写" maxlength="30">
+        </div>
+    </div>
+
+    <!--退货数量-->
+    <div class="sales-item">
+        <div class="title-sales">退货数量</div>
+        <div class="content-sales sales-update-num">
+            <div class="goods-update-num">
+                <input type="hidden" class="max-num" value="${item_num!'1'}">
+                <input type="hidden" class="this-num" value="1">
+                <a class="goods-symbol symbol-less<#if (item_num < 2)> disabled</#if>"
+                   href="javascript:;"></a>
+                <input type="tel" class="goods-num" id="sales-goods-num" size="4" value="${item_num!'1'}" name="goodsNum" maxlength="4" <#if (item_num < 2)>readonly</#if> />
+                <a class="goods-symbol symbol-add disabled" href="javascript:;"></a>
+            </div>
+        </div>
+    </div>
+
+    <!--退款金额-->
+    <div class="sales-item">
+        <div class="title-sales">退款金额</div>
+        <div class="content-sales">
+            <input type="tel" name="apply_alltotal" class="return-account" id="apply-alltotal" value="${item_total_price?string('0.00')}" maxlength="9">
+        </div>
+    </div>
+
+    <!--退货-->
+    <div class="sales-item">
+        <div class="title-sales">退货原因</div>
+        <div class="content-sales">
+            <select name="reason" class="sales-select">
+                <option value="0">请选择退货原因</option>
+                <option value="商品质量有问题">商品质量有问题</option>
+                <option value="不喜欢/不想要">不喜欢/不想要</option>
+                <option value="收到商品与描述不符">收到商品与描述不符</option>
+                <option value="发票问题">发票问题</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+    </div>
+
+    <!--问题描述-->
+    <div class="sales-item">
+        <div class="title-sales">问题描述</div>
+        <div class="content-sales">
+            <textarea name="remark" class="sales-remark sales-account-input" maxlength="180" placeholder="写下您出现的问题吧，最多180个字哦！"></textarea>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+		<#assign  title="会员登录" />
+		<#include '/common/header.html'/>
+		<#assign apartListTag = newTag("apartmentListTag")>
+        <#assign apartmentList = apartListTag('{"type":0}')>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>登录</title>
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+		<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/login.css"/>
+
+	<body class="body-bg">
+		<div id="login">
+			<div class="logo">
+			</div>
+			<!-- <div class="x">
+				<img src="${ctx}${themes_path}/App_Shop/myimages/login/x.png"/>
+			</div> -->
+			<div class="mui-content">
+				<div class="mui-content-padded">
+					<input id="account" name="userName" type="text" class="input-setting" placeholder="请输入用户名">
+				</div>
+				<div class="mui-content-padded">
+					<input id="password" name="passwd" type="password" class="input-setting" placeholder="请输入密码">
+					<br/>
+					<span id="forget-pwd" class="forget-pwd">忘记密码?</span>
+				</div>
+				<div class="mui-content-padded">
+					<input id="submitForm" class="loginbtn font-size-big btn" type="button" value="登录">
+				</div>
+				<div class="mui-content-padded">
+					<input id="register" class="registerbtn font-size-big btn" type="button" value="注册">
+				</div>
+			</div>
+		</div>
+		<div id="mypopup">
+				
+				<div class="prompt">
+					<p id="wxts">温馨提示</p>
+					<p id="hintinfo"></p>
+					<a id="closepopup">确定</a>
+				</div>
+		</div>
+	</body>
+		
+		<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+        <script src="${ctx}${themes_path}/App_Shop/js/layer/layer.js"></script>
+        <script src="${ctx}${themes_path}/App_Shop/js/jquery-2.1.1.min.js"></script>
+		<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+        <script src="${ctx}${themes_path}/App_Shop/js/page/login.js"></script>
+		<script>	
+
+			if(isAndroid){
+				document.addEventListener("backbutton", onBackKeyDown2, false);
+				function onBackKeyDown2(e) {
+				   e.preventDefault();
+				   layer.open({
+		               content: '确定退出程序吗？',
+		               btn: ['确定', '取消'],
+		               yes: function(index){
+		            	   exitApp();
+		                   layer.close(index);
+		               }
+		           });
+				}
+
+				function exitApp(){
+					navigator.app.exitApp();
+				}
+			}
+		</script>	

@@ -1,0 +1,32 @@
+<#assign  title="站内消息详情" />
+<#assign messageFrontDetailTag = newTag("messageFrontDetailTag")>
+<#assign messagesFrontDetail = messageFrontDetailTag('{"messageId":"${msgId}","status":"${status}"}')>
+<#assign detail = messagesFrontDetail.messageFrontMap>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>消息详情</title>
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}${themes_path}/App_Shop/css/app.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+    <link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/msg.css"/>
+
+<body class="body-bg">
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">消息详情</h1>
+    </header>
+    <div class="mui-content">
+        <div id="detail-msg">
+            <p><h4 style="text-align: center">${detail.msg_title!''}</h4></p>
+            <div class="message-detail">
+                ${detail.msg_content}
+            </div>
+            <p class="msg-foot">
+                发布者：<span>${detail.msg_title!''}</span><br/>
+                发布时间：<span><@dateformat time="${detail.send_time?c}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+            </p>
+        </div>
+    </div>
+</body>
+<script src="${ctx}${themes_path}/App_Shop/js/mui.min.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>

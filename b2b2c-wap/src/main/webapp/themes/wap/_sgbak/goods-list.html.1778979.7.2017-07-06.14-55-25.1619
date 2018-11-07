@@ -1,0 +1,136 @@
+<#include '/common/header.html' />
+<#assign  title="商品列表" />
+<#assign searchSelectorTag= newTag("searchSelectorTag") />
+<#assign goodsSelector = searchSelectorTag() />
+<#assign goodsSearchTag= newTag("goodsSearchTag") />
+<#assign webpage = goodsSearchTag('{"pageSize":16}') />
+
+<#assign selected_cat= goodsSelector.selected_cat />
+<#assign selected_brand= goodsSelector.selected_brand />
+<#assign selected_price= goodsSelector.selected_price![] />
+
+<#assign catList= goodsSelector.cat />
+<#assign brantrist= goodsSelector.brand />
+<#assign sortList= goodsSelector.sort![] />
+<#assign priceList= goodsSelector.price![] />
+<style>
+	#top #navigator{
+		background-color:#e73602;
+		position: fixed;
+    	top: 0px;
+	}
+	.sort{
+		width: 100%;
+    	padding: 0;
+    	overflow: hidden;
+    	background: #fff;
+	}
+	.sort ul{
+	    width: 105%;
+    	text-align: center;
+    	height: 60px;
+    	overflow: hidden;
+    	margin: 0;
+	}
+	.goodslist{
+		background:#efeff4;
+	}
+	.goodslist ul{
+		margin-top:2%;
+	}
+	.goodslist ul li{
+		background:#fff
+	}
+	.sort ul li a{
+		width: 33%;
+    	height: 48px;
+    	display: inline;
+    	float: left;
+   		border: 0px solid #d1d3d0;
+    	border-right: 0px none;
+    	line-height: 48px;
+    	text-align: center;
+    	color: #4b4c4c;
+    	font-size: 14px;
+	}
+	.sort ul li .selected{
+		background: #fff;
+    	color: #000;
+    	border-bottom:1px solid #E73602;
+	}
+	.goodslist ul .goods_list a{
+		height: 40px;
+    	width: 90%;
+    	margin: 0px 5%;
+    	font-size: 12px;
+    	display: block;
+    	color: #4b4c4c;
+    	overflow: auto;
+    	line-height:17px;
+	}
+	.sort ul .last a{border-right: 0px solid #d1d3d0; }
+	.goodslist ul .goods_list span{
+		    font-size: 16px;
+	}
+</style>
+<div style="width:100%;height:45px;"></div>
+<div class="sort" style="position:fixed;top:40px">
+    <ul class="goods-list-selector">
+        <#assign seachUrlTag= newTag("seachUrlTag") />
+        <#assign searchUrl=seachUrlTag('"name":"sort"')!'search' />
+        <#assign searchParamTag= newTag("searchParamTag") />
+        <#assign sort=searchParamTag('"name":"sort"')!'0' />
+
+        <#list sortList as selector >
+            <li data-href="${selector.url!''}"
+            <#if !selector_has_next>class="last"</#if>
+            ><a href="javascript:;"
+            <#if selector.isSelected>class="goods-list-selector selected ${selector.value}"</#if>
+            >${selector.name}</a></li>
+        </#list>
+    </ul>
+</div>
+<div style="margin-top:60px" class="faqlist">
+    <div class="goodslist">  
+        <#assign goodsSearchTag= newTag("goodsSearchTag") />
+        <#assign webpage = goodsSearchTag('{"pageSize":10,"pageNo":${page!1},"url":"search-cat-1.html"}') />
+
+        <ul class="list">
+            <#list webpage.result as goods>
+                <li class="goods_list" rel='${goods.goods_id}'>
+                    <a href='${ctx}/goods-${goods.goods_id}.html' style="height: 170px; overflow: hidden;">
+                        <@image src="${goods.thumbnail!''}" alt="${goods.name}"/>
+                        <a href="${ctx}/goods-${goods.goods_id}.html" style="overflow:auto">
+                            ${goods.name}
+                        </a>
+                        <span>￥${goods.price}</span>
+                    </a>
+                </li>
+            </#list>
+        </ul>
+    </div>
+    <div class="list_page" style="margin-top:20px;">
+        <@pager pageno="${webpage.currentPageNo}" pagesize="${webpage.pageSize}" totalcount="${webpage.totalCount}" />
+    </div>
+
+</div>
+
+<script>
+    $(function () {
+
+        var sortnum = $(".sort_num").text()
+
+        var module = new Module();
+        module.navigator.init('商品列表');
+
+
+        $('.goods-list-selector li').on('tap', function () {
+            location.replace($(this).attr('data-href'));
+            return false
+        })
+
+    })
+
+</script>
+</body>
+</html>

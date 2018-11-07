@@ -1,0 +1,129 @@
+<#assign  title="购物车" />
+<#include '/common/header.html' />
+<link rel="stylesheet" href="${ctx}${themes_path}/App_Shop/mycss/core.css" />
+<link rel="stylesheet" href="${ctx}${themes_path}/css/cart.css">
+<script type="text/javascript" src="${ctx}/statics/e_tools/mobile/library/hammer/hammer.min.js"></script>
+<script type="text/javascript" src="${ctx}/statics/e_tools/mobile/library/hammer/jquery.hammer.js"></script>
+<script src="${ctx}${themes_path}/App_Shop/js/common/core.js"></script>
+<script type="text/javascript" src="${ctx}${themes_path}/js/page/cart.js"></script>
+
+<#assign cartTag= newTag("storeCartGoodsTag") />
+<#assign itemList = cartTag() />
+<div class="cart">
+	<div style="width:100%;height:45px;"></div>
+    <#if (itemList?size > 0)>
+         <#list itemList as store>
+             <div class="inner-cart" style="padding-bottom:50px;margin-bottom:10px">
+                 <div class="inner-store-items">
+                     <div class="store-item">
+                         <div class="title-store-item">
+                             <div class="store-check">
+                                 <i class="checked-item checkbox-store" id="store-${store.store_id!''}"
+                                    data-id="${store.store_id!'0'}"></i>
+                             </div>
+                             <div class="store-name" data-id="${store.store_id!''}">${store.store_name!''}</div>
+                             <!-- <div class="store-other">
+                                 <span class="receive-bonus tap"
+                                       data-href="${ctx}/cart/cart-bonus.html?store_id=${store.store_id!'0'}"><a
+                                         href="javascript:;">&nbsp;领券</a></span>
+                             </div> -->
+                         </div>
+                         <div class="content-store-item">
+                             <#list store.goodslist as goods>
+                                 <div class="goods-item">
+                                     <div class="goods-check">
+                                         <i class="checked-item checkbox-goods goods-store-${store.store_id!''}"
+                                            data-id="${store.store_id!'0'}" product-id="${goods.product_id!''}"
+                                         <#if goods.others.exchange_point??>exchange="1"
+                                             <#else>exchange="0"
+                                         </#if>
+                                         >
+                                         <#if goods.group_id?exists>
+                                             <input type="hidden" value="1">
+                                             <#else>
+                                             <input type="hidden" value="0">
+                                         </#if>
+                                         </i>
+                                     </div>
+                                     <div class="goods-image">
+                                         <@image src="${goods.image_default!''}" alt="${goods.name}" />
+                                     </div>
+                                     <div class="goods-content">
+                                         <div class="goods-name">${goods.name}</div>
+                                         <div class="goods-other">
+                                             <#if goods.others?exists>
+                                                 <#if goods.others.specList?exists>
+                                                     <#list goods.others.specList as spec>
+                                                         <i>${spec.name}:${spec.value}</i>
+                                                     </#list>
+                                                 </#if>
+                                                 <#if goods.others.gys_name?exists>
+                                                   	  供应商：${goodsothers.gys_name!''}
+                                                 </#if>
+                                             </#if>
+                                             <div class="goods-other1">
+                                             	<#if goods.group_id?exists>
+                                             		<span style="font-size:14px;color:#f23030">
+                                             			团购商品
+                                             		</span>
+                                             		<input type="hidden" value="1">
+                                             		<#else>
+                                             		<input type="hidden" value="0">
+                                             	</#if>
+                                             </div>   
+                                         </div>
+                                         <div class="goods-tools">
+                                             <div class="goods-price">
+                                                 <#assign _price  = goods.price?string("0.00") />
+                                                 <#assign _length = _price?length />
+                                                 	￥<strong>${_price?substring(0, _length-3)}</strong>${_price?substring(_length-3,
+                                                 _length)}
+                                             </div>
+                                             <div class="goods-update-num">
+                                                 <input type="hidden" class="max-num" value="200">
+                                                 <input type="hidden" class="this-num" value="1">
+                                                 <a class="goods-symbol symbol-less<#if (goods.num < 2)> disabled</#if>"
+                                                    href="javascript:;"></a>
+                                                 <input type="tel" class="goods-num" size="4" value="${goods.num!'1'}"
+                                                        name="num" maxlength="4" cart-id="${goods.id!''}"
+                                                        product-id="${goods.product_id!''}"
+                                                        onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                                                 <a class="goods-symbol symbol-add" href="javascript:;"></a>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <div class="delete-box" data-id="${goods.id!''}">删除</div>
+                                 </div>
+                             </#list>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+        </#list>
+    <#else/>
+        <div class="no-goods-cart"></div>
+    </#if>
+    <div class="cart-total-bar">
+        <div class="goods-check-all">
+            <i id="goods-check-all"></i>
+            <span>全选</span>
+        </div>
+        <div class="total-bar"></div>
+        <a href="javascript:;" class="go-bill">去结算</a>
+    </div>
+    
+</div>
+<input type="hidden" id="url" value="/App_Shop/page1/index.html">
+<div id="mypopup">
+		
+		<div class="prompt">
+		    <p id="wxts">温馨提示</p>
+		    <p id="hintinfo"></p>
+		    <a id="closepopup">确定</a>
+		</div>
+</div>
+</body>
+
+
+
+

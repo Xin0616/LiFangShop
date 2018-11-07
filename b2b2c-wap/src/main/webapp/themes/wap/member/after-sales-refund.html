@@ -1,0 +1,82 @@
+<!--退款-->
+<div class="refund-box" id="refund-form">
+    <div style="display: none;">
+        <input type="hidden" name="orderid" value="${order_id}">
+    </div>
+    <!--是否收货-->
+    <div class="sales-item">
+        <div class="title-sales">是否收货</div>
+        <div class="content-sales">
+            <#if orderDetail.ship_status == orderState.SHIP_NO>
+                <span class="sales-btn selected">未收货</span>
+                <input type="hidden" value="0" name="ship_status">
+            </#if>
+            <#if orderDetail.ship_status != orderState.SHIP_NO  >
+                <#if orderDetail.pay_status == orderState.PAY_YES  >
+                    <span class="sales-btn selected">已收货</span>
+                    <input type="hidden" value="1" name="ship_status">
+                </#if>
+            </#if>
+        </div>
+    </div>
+
+    <!--退款方式-->
+    <div class="sales-item">
+        <div class="title-sales">退款方式</div>
+        <div class="content-sales">
+            <span class="sales-btn selected">${orderDetail.payment_name}</span>
+        </div>
+    </div>
+
+    <!--退款账户-->
+    <div class="sales-item">
+        <div class="title-sales">退款账户</div>
+        <div class="content-sales">
+            <input type="text" name="return_account" class="return-account sales-account-input" placeholder="请务必认真填写" maxlength="30">
+        </div>
+    </div>
+
+    <!--退款金额-->
+    <div class="sales-item">
+        <div class="title-sales">退款金额</div>
+        <div class="content-sales">
+            <input type="tel" name="apply_alltotal" class="return-account" value="${item_total_price?string('0.00')}" maxlength="9">
+        </div>
+    </div>
+
+    <!--退款原因-->
+    <div class="sales-item">
+        <div class="title-sales">退款原因</div>
+        <div class="content-sales">
+            <#if orderDetail.status != orderState.ORDER_COMPLETE >
+                <select name="reason" class="sales-select">
+                    <option value="0">请选择退款原因</option>
+                    <option value="买错/不想要">买错/不想要</option>
+                    <option value="未按照时间发货">未按照时间发货</option>
+                    <option value="快递一直没有收到">快递一直没有收到</option>
+                    <option value="快递无记录">快递无记录</option>
+                    <option value="其他">其他</option>
+                </select>
+            </#if>
+            <#if orderDetail.status == orderState.ORDER_COMPLETE >
+                <select name="reason" class="sales-select">
+                    <option value="0">请选择退款原因</option>
+                    <option value="商品质量有问题">商品质量有问题</option>
+                    <option value="收到商品与描述不符">收到商品与描述不符</option>
+                    <option value="不喜欢/不想要">不喜欢/不想要</option>
+                    <option value="发票问题">发票问题</option>
+                    <option value="空包裹">空包裹</option>
+                    <option value="其他">其他</option>
+                </select>
+            </#if>
+        </div>
+    </div>
+
+    <!--问题描述-->
+    <div class="sales-item">
+        <div class="title-sales">问题描述</div>
+        <div class="content-sales">
+            <textarea name="remark" class="sales-remark sales-account-input" maxlength="180" placeholder="写下您出现的问题吧，最多180个字哦！"></textarea>
+        </div>
+    </div>
+</div>
